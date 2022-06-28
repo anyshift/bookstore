@@ -14,7 +14,7 @@ public class ReflectionUtils {
      * @param <T>
      */
     public static<T> Class<T> getSuperGenericType(Class clazz){
-        return getSuperClassGenericType(clazz, 0); //返回第一个参数类型，本项目中为Account、Book、Trade等类型
+        return getSuperClassGenericType(clazz, 0); //返回第一个参数类型，本项目中返回的为Account、Book、Trade等类型
     }
 
     /**

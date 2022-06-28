@@ -18,7 +18,7 @@ public class JDBCUtils {
             String user = properties.getProperty("user");
             String password = properties.getProperty("password");
             String url = properties.getProperty("url");
-            String driveClass = properties.getProperty("driveClass");
+            String driveClass = properties.getProperty("driveClass"); //driveClass=com.mysql.cj.jdbc.Driver
 
             Class.forName(driveClass);
             connection = DriverManager.getConnection(url, user, password);

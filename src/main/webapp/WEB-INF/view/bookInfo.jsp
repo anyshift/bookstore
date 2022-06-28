@@ -17,7 +17,7 @@
             <tr>
                 <td style="background-color: beige;">书名</td>
                 <td>《${requestScope.book.title}》</td>
-                <td rowspan="7"><a href="index?method=getBooks&pageNum=${param.pageNum}" style="text-decoration: none;">继续购物</a></td>
+                <td rowspan="7"><a href="index?method=getBooks&pageNum=${param.pageNum}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}" style="text-decoration: none;">继续购物</a></td>
             </tr>
             <tr>
                 <td style="background-color: beige;">作者</td>

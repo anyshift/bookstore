@@ -75,7 +75,7 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
     public List<Book> getBookList(PriceLimit pl, int itemSizePerPage) {
         String sql = "select id, Author, Title, Price, Publishingdate, Salesamount, " +
                 "Storenumber, Remark from mybooks where price <= ? AND price >= ? limit ?, ?";
-        return queryForList(sql, pl.getMaxPrice(), pl.getMinPrice(), pl.getCurrentPageNumber() - 1, itemSizePerPage);
+        return queryForList(sql, pl.getMaxPrice(), pl.getMinPrice(), (pl.getCurrentPageNumber() - 1) * itemSizePerPage, itemSizePerPage);
     }
 
     /*
@@ -83,7 +83,7 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
         String sql = "select id, Author, Title, Price, Publishingdate, Salesamount, " +
                 "Storenumber, Remark from mybooks where price <= ? AND " +
                 "price >= ? order by ? ? limit ?, ?";
-        return queryForList(sql, pl.getMaxPrice(), pl.getMinPrice(), pl.getCurrentPageNumber() - 1, itemSizePerPage, filterType, filterMode);
+        return queryForList(sql, pl.getMaxPrice(), pl.getMinPrice(), filterType, filterMode, (pl.getCurrentPageNumber() - 1) * itemSizePerPage, itemSizePerPage);
     }
     */
 

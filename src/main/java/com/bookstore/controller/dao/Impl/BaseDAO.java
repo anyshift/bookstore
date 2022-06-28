@@ -36,7 +36,7 @@ public class BaseDAO<T> implements DAO<T> {
         ResultSet rs = null;
         try {
             connection = JDBCUtils.getConnection();
-            ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); //Statement.RETURN_GENERATED_KEYS可以获取到sql语句执行后影响的关键字集
 
             for (int i = 0; i < args.length; i++) {
                 ps.setObject(i+1, args[i]);

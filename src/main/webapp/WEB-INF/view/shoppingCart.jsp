@@ -18,7 +18,7 @@
 
         <c:choose>
             <c:when test="${empty sessionScope.shoppingCart.books}">
-                购物车已清空，<a href="index?method=getBooks">继续购物</a>
+                购物车已清空，<a href="index?method=getBooks&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}">继续购物</a>
             </c:when>
             <c:otherwise>当前购物车共有${sessionScope.shoppingCart.bookNumber}本书
                 <br><br>
@@ -34,7 +34,7 @@
                     <c:if test="${!empty sessionScope.shoppingCart.bookNumber}">
                         <c:forEach items="${sessionScope.shoppingCart.items}" var="item">
                             <tr>
-                                <td><a href="index?method=shoppingCart&cartAction=bookInfo&bookID=${item.book.bookId}">${item.book.title}</a></td>
+                                <td><a href="index?method=shoppingCart&cartAction=bookInfo&bookID=${item.book.bookId}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}">${item.book.title}</a></td>
                                 <td style="padding: unset">
                                     <input type="text" size="2" value="${item.quantity}" style="text-align: center"/>
                                 </td>
@@ -51,7 +51,7 @@
                 </table>
                 <br><br>
 
-                <a href="index?method=getBooks">继续购物</a> &nbsp;&nbsp;
+                <a href="index?method=getBooks&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}">继续购物</a> &nbsp;&nbsp;
                 <a href="index?method=shoppingCart&cartAction=clear">清空购物车</a> &nbsp;&nbsp;
                 <a href="index?method=shoppingCart&cartAction=toPay">支付</a>
             </c:otherwise>
