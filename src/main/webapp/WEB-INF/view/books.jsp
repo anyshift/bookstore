@@ -7,18 +7,12 @@
     <script src="jquery/jquery-3.6.0.min.js"></script>
     <%@ include file="/common/param.jsp" %>
     <style>
-        a {
-            text-decoration: none;
-        }
-
+        a { text-decoration: none; }
         table {
             border-collapse: collapse; /*为表格设置合并边框模型*/
             table-layout: fixed; /*列宽由表格宽度和列宽度设定*/
         }
-
-        td {
-            word-break: break-word; /*允许在单词内换行。*/
-        }
+        td { word-break: break-word; /*允许在单词内换行。*/ }
     </style>
     <script type="text/javascript">
         $(function () {
@@ -27,7 +21,7 @@
                 value = $.trim(value);
 
                 let flag = false;
-                let reg = /[^\d.]/g;
+                let reg = /^\d+$/g;
                 let pageNumber = 0;
 
                 if (reg.test(value)) {
