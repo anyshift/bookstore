@@ -10,6 +10,7 @@
 <html>
 <head>
     <title>书籍详情</title>
+    <%@ include file="/common/param.jsp" %>
 </head>
 <body>
 
@@ -24,7 +25,7 @@
             <tr>
                 <td style="background-color: beige">书名</td>
                 <td>《${requestScope.book.title}》</td>
-                <td rowspan="7"><a href="index?method=shoppingCart&cartAction=list&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}" style="text-decoration: none;">返回购物车</a></td>
+                <td rowspan="7"><a href="index?method=shoppingCart&cartAction=list" style="text-decoration: none;">返回购物车</a></td>
             </tr>
             <tr>
                 <td style="background-color: beige">作者</td>

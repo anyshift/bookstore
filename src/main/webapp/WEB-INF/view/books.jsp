@@ -1,8 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<base href="${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/">
 <html>
 <head>
-    <script type="text/javascript" src="/WEB-INF/view/jquery/jquery-3.6.0.min.js"></script>
+    <%@ include file="/common/param.jsp" %>
     <title>购书网</title>
     <style>
         a { text-decoration: none; }
@@ -15,17 +16,34 @@
         }
     </style>
     <script type="text/javascript">
-        $(function(){
-            $("a").each(function(){
-                this.onclick = function () {
-                    alert(1);
+        $(function () {
+            $(".pageNumber").change(function () {
+                let value = $(this).val();
+                value = $.trim(value);
+
+                let flag = false;
+                let reg = /^\d+$/g;
+                let pageNumber = 0;
+
+                if (reg.test(value)) {
+                    pageNumber = parseInt(value);
+                    if (pageNumber >= 1 && pageNumber <= parseInt("${requestScope.books.getTotalPageNumber()}")) {
+                        flag = true;
+                    }
                 }
+
+                if (!flag) {
+                    alert("页码输入有误");
+                    $(this).val(""); //将错误页码置空
+                    return; //停止后续程序执行
+                }
+
+                let href = "index?method=getBooks&pageNum=" + pageNumber + "&" + $(":hidden").serialize();
+                window.location.href = href;
             });
-        });
+        })
     </script>
 </head>
-    <input type="hidden" name="minPrice" value="${param.minPrice}"/>
-    <input type="hidden" name="maxPrice" value="${param.maxPrice}"/>
 <body>
     <center>
         <br><br>
@@ -36,7 +54,7 @@
 
         <c:if test="${!empty sessionScope.shoppingCart.books}">
             <%-- bookNumber是ShoppingCart对象中的getBookNumber()方法，读取bean方法，省去get。（JSP JavaBean） --%>
-            当前购物车中共有 ${sessionScope.shoppingCart.bookNumber} 本书，<a href="index?method=shoppingCart&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}">查看购物车</a>
+            当前购物车中共有 ${sessionScope.shoppingCart.bookNumber} 本书，<a href="index?method=shoppingCart">查看购物车</a>
         </c:if>
         <br><br>
 
@@ -54,7 +72,7 @@
             <c:forEach items="${requestScope.books.bookList}" var="book">
                 <tr>
                     <td style="width: 150px;">
-                        <a href="index?method=getBook&bookID=${book.getBookId()}&pageNum=${requestScope.books.currentPageNum}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}">《${book.title}》</a>
+                        <a href="index?method=getBook&bookID=${book.getBookId()}&pageNum=${requestScope.books.currentPageNum}">《${book.title}》</a>
                         <br /> &nbsp; <span style="font-size: 14px">作者: ${book.author}</span>
                     </td>
                     <td style="text-align: center">${book.salesAmount}</td>
@@ -64,7 +82,7 @@
                         <c:choose>
                             <c:when test="${book.storeNumber == 0}">库存不足</c:when>
                             <c:otherwise>
-                                <a href="index?method=shoppingCart&cartAction=add&pageNum=${requestScope.books.currentPageNum}&bookID=${book.getBookId()}&bookTitle=${book.title}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}">加入购物车</a>
+                                <a href="index?method=shoppingCart&cartAction=add&pageNum=${requestScope.books.currentPageNum}&bookID=${book.getBookId()}&bookTitle=${book.title}">加入购物车</a>
                             </c:otherwise>
                         </c:choose>
                     </td>
@@ -102,20 +120,20 @@
         &nbsp;&nbsp;
 
         <c:if test="${requestScope.books.hasPrevPage}">
-            <a href="index?method=getBooks&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}">首页</a>
+            <a href="index?method=getBooks">首页</a>
             &nbsp;&nbsp;
-            <a href="index?method=getBooks&pageNum=${requestScope.books.prevPage}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}">上一页</a>
+            <a href="index?method=getBooks&pageNum=${requestScope.books.prevPage}">上一页</a>
             &nbsp;&nbsp;
         </c:if>
 
         <c:if test="${requestScope.books.hasNextPage}">
-            <a href="index?method=getBooks&pageNum=${requestScope.books.nextPage}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}">下一页</a>
+            <a href="index?method=getBooks&pageNum=${requestScope.books.nextPage}">下一页</a>
             &nbsp;&nbsp;
-            <a href="index?method=getBooks&pageNum=${requestScope.books.totalPageNumber}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}">末页</a>
+            <a href="index?method=getBooks&pageNum=${requestScope.books.totalPageNumber}">末页</a>
             &nbsp;&nbsp;
         </c:if>
 
-        跳转至第 <input type="text" name="toPage" size="1" style="text-align: center"/> 页
+        跳转至第 <input type="text" size="1" class="pageNumber" style="text-align: center"/> 页
 
     </center>
     <br><br>

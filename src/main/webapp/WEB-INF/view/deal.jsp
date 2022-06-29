@@ -3,6 +3,7 @@
 <html>
 <head>
     <title>交易前台</title>
+    <%@ include file="/common/param.jsp" %>
 </head>
 <body>
 

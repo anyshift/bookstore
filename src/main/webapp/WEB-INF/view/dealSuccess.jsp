@@ -9,6 +9,7 @@
 <html>
 <head>
     <title>交易完成</title>
+    <%@ include file="/common/param.jsp" %>
 </head>
 <body>
 

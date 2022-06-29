@@ -5,7 +5,7 @@
 <head>
     <title>购物车</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <script src="jquery/jquery-3.6.0.min.js"></script>
+    <%@ include file="/common/param.jsp" %>
     <style>
         a {
             text-decoration: none;
@@ -53,7 +53,7 @@
 
                 let flag2 = confirm("确定要修改《" + title + "》的数量吗?");
                 if(!flag2){
-                    $(this).val($(this).attr("class")); //如果选择取消，则把class中的原有quanqity复原
+                    $(this).val($(this).attr("class")); //如果选择取消，则复原原有quantity
                     return;
                 }
 
@@ -79,7 +79,7 @@
         <br><br>
         <c:choose>
             <c:when test="${empty sessionScope.shoppingCart.books}">
-                购物车已清空，<a href="index?method=getBooks&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}">继续购物</a>
+                购物车已清空，<a href="index?method=getBooks">继续购物</a>
             </c:when>
             <c:otherwise>
                 <div id="bookNumber">当前购物车共有 ${sessionScope.shoppingCart.bookNumber} 本书</div>
@@ -95,7 +95,7 @@
                     <c:if test="${!empty sessionScope.shoppingCart.bookNumber}">
                         <c:forEach items="${sessionScope.shoppingCart.items}" var="item">
                             <tr>
-                                <td><a href="index?method=shoppingCart&cartAction=bookInfo&bookID=${item.book.bookId}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}">${item.book.title}</a></td>
+                                <td><a href="index?method=shoppingCart&cartAction=bookInfo&bookID=${item.book.bookId}">${item.book.title}</a></td>
                                 <td style="padding: unset">
                                     <input type="text" class="${item.quantity}" size="2" name="${item.book.bookId}" value="${item.quantity}" style="text-align: center"/>
                                 </td>
@@ -112,7 +112,7 @@
                 </table>
                 <br><br>
 
-                <a href="index?method=getBooks&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}">继续购物</a> &nbsp;&nbsp;
+                <a href="index?method=getBooks">继续购物</a> &nbsp;&nbsp;
                 <a href="index?method=shoppingCart&cartAction=clear">清空购物车</a> &nbsp;&nbsp;
                 <a href="index?method=shoppingCart&cartAction=toPay">支付</a>
             </c:otherwise>
