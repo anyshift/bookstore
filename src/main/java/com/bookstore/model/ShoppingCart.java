@@ -47,9 +47,9 @@ public class ShoppingCart {
 
     //获取购物车商品总金额
     public float getTotalMoney() {
-        int total = 0;
+        float total = 0f;
         for (ShoppingCartItem sci : books.values()) {
-            total += sci.getItemMoney();
+            total += sci.getItemMoney() * sci.getQuantity();
         }
         return total;
     }

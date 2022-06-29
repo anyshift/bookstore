@@ -29,7 +29,7 @@ public class ShoppingCartItem {
 
     //获取购物车中某商品总价
     public float getItemMoney() {
-        return book.getPrice() * quantity;
+        return book.getPrice();
     }
 
     //购物车某商品数+1
