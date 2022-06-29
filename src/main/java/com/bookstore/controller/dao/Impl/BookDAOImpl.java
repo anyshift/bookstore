@@ -42,8 +42,7 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
     @Override
     public long getTotalBooksNumber(PriceLimit pl) {
         String sql = "select count(id) from mybooks where price >= ? and price <= ?";
-        long count = getSingleValue(sql, pl.getMinPrice(), pl.getMaxPrice());
-        return count;
+        return getSingleValue(sql, pl.getMinPrice(), pl.getMaxPrice());
     }
 
     /**
@@ -75,8 +74,14 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
     public List<Book> getBookList(PriceLimit pl, int itemSizePerPage) {
         String sql = "SELECT id, Author, Title, Price, Publishingdate, Salesamount, " +
                 "Storenumber, Remark FROM mybooks WHERE price <= ? AND price >= ? LIMIT ?, ?";
+
+        int begin = 0;
+        if (pl.getCurrentPageNumber() == 0) {
+            begin = 1;
+        } else begin = (pl.getCurrentPageNumber() - 1) * itemSizePerPage;
+
         return queryForList(sql, pl.getMaxPrice(), pl.getMinPrice(),
-                        (pl.getCurrentPageNumber() - 1) * itemSizePerPage, itemSizePerPage);
+                        begin, itemSizePerPage);
     }
 
     /*
