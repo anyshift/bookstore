@@ -7,12 +7,14 @@ import com.bookstore.controller.webpage.PriceLimit;
 import com.bookstore.model.Book;
 import com.bookstore.model.ShoppingCart;
 import com.bookstore.model.ShoppingCartItem;
+import com.google.gson.Gson;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -232,5 +234,32 @@ public class BookService extends HttpServlet {
                 }
             }
         }
+    }
+
+    protected void updateQuantityWithAjax(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String bookIdFromURL = request.getParameter("bookID");
+        String quantityFromURL = request.getParameter("quantity");
+
+        int bookId = -1;
+        int quantity = -1;
+
+        try {
+            bookId = Integer.parseInt(bookIdFromURL);
+            quantity = Integer.parseInt(quantityFromURL);
+        } catch (Exception e) {}
+
+        ShoppingCart shoppingCart = ShoppingCartUtils.getShoppingCart(request);
+        if (bookId > 0 && quantity > 0) {
+            ShoppingCartUtils.updateShoppingCartItemQuantity(shoppingCart, bookId, quantity);
+        }
+
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("bookNumber", shoppingCart.getBookNumber());
+        result.put("totalMoney", shoppingCart.getTotalMoney());
+
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(result);
+        response.setContentType("text/javascript");
+        response.getWriter().print(jsonStr);
     }
 }

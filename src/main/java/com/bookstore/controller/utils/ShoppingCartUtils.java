@@ -30,6 +30,10 @@ public class ShoppingCartUtils {
         return false;
     }
 
+    public static void updateShoppingCartItemQuantity(ShoppingCart sc, int bookID, int quantity) {
+        sc.updateItemQuantity(bookID, quantity);
+    }
+
     public static ShoppingCart getShoppingCart(HttpServletRequest request) {
         HttpSession session = request.getSession();
         ShoppingCart shoppingCart = (ShoppingCart) session.getAttribute("shoppingCart");
