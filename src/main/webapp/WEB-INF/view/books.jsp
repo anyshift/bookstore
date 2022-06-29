@@ -162,10 +162,13 @@
 
     <%-- -------------------------分割线------------------------- --%>
 
+    &nbsp;&nbsp;
     共 ${requestScope.books.getTotalPageNumber()} 页
     &nbsp;&nbsp;
-    当前第 ${requestScope.books.currentPageNum} 页
+    <c:if test="${requestScope.books.currentPageNum != 0}">
+        当前第 ${requestScope.books.currentPageNum} 页
     &nbsp;&nbsp;
+    </c:if>
 
     <c:if test="${requestScope.books.hasPrevPage}">
         <a href="index?method=getBooks">首页</a>
@@ -181,7 +184,9 @@
         &nbsp;&nbsp;
     </c:if>
 
+    <c:if test="${requestScope.books.hasPrevPage}">
     跳转至第 <input type="text" size="1" class="pageNumber" style="text-align: center"/> 页
+    </c:if>
 
 </center>
 <br><br>

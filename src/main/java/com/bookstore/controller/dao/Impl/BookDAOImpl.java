@@ -75,9 +75,9 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
         String sql = "SELECT id, Author, Title, Price, Publishingdate, Salesamount, " +
                 "Storenumber, Remark FROM mybooks WHERE price <= ? AND price >= ? LIMIT ?, ?";
 
-        int begin = 0;
+        int begin;
         if (pl.getCurrentPageNumber() == 0) {
-            begin = 1;
+            begin = 0;
         } else begin = (pl.getCurrentPageNumber() - 1) * itemSizePerPage;
 
         return queryForList(sql, pl.getMaxPrice(), pl.getMinPrice(),
