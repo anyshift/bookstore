@@ -10,8 +10,8 @@
 <html>
 <head>
     <title>书籍详情</title>
-    <%@ include file="/common/param.jsp" %>
     <script src="jquery/jquery-3.6.0.min.js"></script>
+    <%@ include file="/common/param.jsp" %>
 </head>
 <body>
 

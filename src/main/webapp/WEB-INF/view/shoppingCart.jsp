@@ -5,8 +5,8 @@
 <head>
     <title>购物车</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <%@ include file="/common/param.jsp" %>
     <script src="jquery/jquery-3.6.0.min.js"></script>
+    <%@ include file="/common/param.jsp" %>
     <style>
         a {
             text-decoration: none;
