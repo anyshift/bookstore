@@ -5,6 +5,7 @@
 <head>
     <title>购书网</title>
     <script src="jquery/jquery-3.6.0.min.js"></script>
+    <script src="js/validate-price.js"></script>
     <%@ include file="/common/param.jsp" %>
     <style>
         a { text-decoration: none; }
@@ -14,7 +15,7 @@
         }
         td { word-break: break-word; /*允许在单词内换行。*/ }
     </style>
-    <script type="text/javascript">
+    <script>
         $(function () {
             $(".pageNumber").change(function () {
                 let value = $(this).val();
@@ -26,7 +27,7 @@
 
                 if (reg.test(value)) {
                     pageNumber = parseInt(value);
-                    if (pageNumber >= 1 && pageNumber <= parseInt("${requestScope.books.getTotalPageNumber()}")) {
+                    if (pageNumber >= 1 && pageNumber <= parseInt("${requestScope.books.getTotalPageNumber()})")) {
                         flag = true;
                     }
                 }
@@ -37,56 +38,9 @@
                     return; //停止后续程序执行
                 }
 
-                let href = "index?method=getBooks&pageNum=" + pageNumber + "&" + $(":hidden").serialize();
-                window.location.href = href;
+                window.location.href = "index?method=getBooks&pageNum=" + pageNumber + "&" + $(":hidden").serialize();
             });
-
-            $("#minPrice").change(function () {
-                let value = $(this).val();
-                value = $.trim(value);
-
-                let minPrice = -1;
-                let flag = false;
-                let reg = /[^\d.]/g;
-
-                if (reg.test(value)) {
-                    minPrice = parseInt(value);
-                    if (minPrice > 0) {
-                        minPrice = true;
-                    }
-                }
-
-                if (minPrice) {
-                    $(this).val($(this).attr(minPrice));
-                } else {
-                    alert("价格输入有误，请重新输入");
-                    $(this).val($(this).attr(""));
-                }
-            });
-
-            $("#maxPrice").change(function () {
-                let value = $(this).val();
-                value = $.trim(value);
-
-                let maxPrice = -1;
-                let flag = false;
-                let reg = /[^\d.]/g;
-
-                if (reg.test(value)) {
-                    maxPrice = parseInt(value);
-                    if (maxPrice > 0) {
-                        maxPrice = true;
-                    }
-                }
-
-                if (maxPrice) {
-                    $(this).val($(this).attr(maxPrice));
-                } else {
-                    alert("价格输入有误，请重新输入");
-                    $(this).val($(this).attr(""));
-                }
-            });
-        })
+        });
     </script>
 </head>
 <body>
