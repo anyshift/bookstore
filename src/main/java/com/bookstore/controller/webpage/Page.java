@@ -59,7 +59,7 @@ public class Page<T> {
 
     //是否有上一页
     public boolean isHasPrevPage() {
-        if (getCurrentPageNum() == 1) return false;
+        if (getCurrentPageNum() == 1 || getCurrentPageNum() == 0) return false;
         return true;
     }
 
