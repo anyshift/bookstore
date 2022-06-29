@@ -184,8 +184,8 @@
         &nbsp;&nbsp;
     </c:if>
 
-    <c:if test="${requestScope.books.hasPrevPage}">
-    跳转至第 <input type="text" size="1" class="pageNumber" style="text-align: center"/> 页
+    <c:if test="${requestScope.books.currentPageNum != 0}">
+    跳转至第 <input type="text" size="1" class="pageNumber" style="text-align: center"/> 页&nbsp;&nbsp;
     </c:if>
 
 </center>
