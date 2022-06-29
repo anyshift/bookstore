@@ -53,13 +53,13 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
      */
     @Override
     public Page<Book> getPage(PriceLimit pl) {
-        /* 创建一个Page对象。得到的Page对象还需对Page对象里的totalItemNumber、bookList赋值，这样才得到一个属性值都有值的Page对象 */
+//      创建一个Page对象。得到的Page对象还需对Page对象里的totalItemNumber、bookList赋值，这样才得到一个属性值都有值的Page对象
         Page<Book> page = new Page<>(pl.getCurrentPageNumber());
-        /* 给Page对象设置总书籍数 */
+//      给Page对象设置总书籍数
         page.setTotalItemNumber(getTotalBooksNumber(pl));
-        /* 设置pl里的当前页数 */
+//      设置pl里的当前页数
         pl.setCurrentPageNumber(page.getCurrentPageNum());
-        /* 让Page对象设置书籍集合 */
+//      让Page对象设置书籍集合
         page.setBookList(getBookList(pl, page.getItemSizePerPage()));
 
         return page;
@@ -76,7 +76,7 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
         String sql = "SELECT id, Author, Title, Price, Publishingdate, Salesamount, " +
                 "Storenumber, Remark FROM mybooks WHERE price <= ? AND price >= ? LIMIT ?, ?";
         return queryForList(sql, pl.getMaxPrice(), pl.getMinPrice(),
-                (pl.getCurrentPageNumber() -1) * itemSizePerPage, itemSizePerPage);
+                        (pl.getCurrentPageNumber() - 1) * itemSizePerPage, itemSizePerPage);
     }
 
     /*
