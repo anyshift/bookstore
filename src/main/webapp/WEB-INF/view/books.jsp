@@ -27,7 +27,7 @@
                 value = $.trim(value);
 
                 let flag = false;
-                let reg = /^\d+$/g;
+                let reg = /[^\d.]/g;
                 let pageNumber = 0;
 
                 if (reg.test(value)) {
@@ -38,13 +38,59 @@
                 }
 
                 if (!flag) {
-                    alert("页码输入有误");
+                    alert("页码输入错误，请重新输入");
                     $(this).val(""); //将错误页码置空
                     return; //停止后续程序执行
                 }
 
                 let href = "index?method=getBooks&pageNum=" + pageNumber + "&" + $(":hidden").serialize();
                 window.location.href = href;
+            });
+
+            $("#minPrice").change(function () {
+                let value = $(this).val();
+                value = $.trim(value);
+
+                let minPrice = -1;
+                let flag = false;
+                let reg = /[^\d.]/g;
+
+                if (reg.test(value)) {
+                    minPrice = parseInt(value);
+                    if (minPrice > 0) {
+                        minPrice = true;
+                    }
+                }
+
+                if (minPrice) {
+                    $(this).val($(this).attr(minPrice));
+                } else {
+                    alert("价格输入有误，请重新输入");
+                    $(this).val($(this).attr(""));
+                }
+            });
+
+            $("#maxPrice").change(function () {
+                let value = $(this).val();
+                value = $.trim(value);
+
+                let maxPrice = -1;
+                let flag = false;
+                let reg = /[^\d.]/g;
+
+                if (reg.test(value)) {
+                    maxPrice = parseInt(value);
+                    if (maxPrice > 0) {
+                        maxPrice = true;
+                    }
+                }
+
+                if (maxPrice) {
+                    $(this).val($(this).attr(maxPrice));
+                } else {
+                    alert("价格输入有误，请重新输入");
+                    $(this).val($(this).attr(""));
+                }
             });
         })
     </script>
@@ -103,7 +149,7 @@
             <tr>
                 <td>
                     最低价：<input type="text" name="minPrice" size="4" value="${param.minPrice}"
-                               style="text-align: center;">
+                               style="text-align: center;" id="minPrice">
                 </td>
                 <td rowspan="2">
                     <input type="submit" value="筛选" style="margin-left: 10px; padding: 12px 5px;">
@@ -114,7 +160,7 @@
             <tr>
                 <td>
                     最高价：<input type="text" name="maxPrice" size="4" value="${param.maxPrice}"
-                               style="text-align: center;">
+                               style="text-align: center;" id="maxPrice">
                 </td>
             </tr>
         </table>
