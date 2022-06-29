@@ -45,7 +45,7 @@
                 }
 
                 if(!flag1){
-                    alert("输入的数量不合法!");
+                    alert("数量输入有误，请重新输入");
                     $(this).val($(this).attr("class"));
                     return;
                 }
