@@ -6,6 +6,7 @@
     <title>购物车</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <%@ include file="/common/param.jsp" %>
+    <script src="jquery/jquery-3.6.0.min.js"></script>
     <style>
         a {
             text-decoration: none;
@@ -21,11 +22,12 @@
             $(".delete").click(function () {
                 let $tr = $(this).parent().parent();
                 let title = $.trim($tr.find("td:first").text());
-                let flag1 = confirm("确定要移除《" + title + "》吗?");
-                if (flag1) {
-                    return true;
-                }
-                return false;
+                return confirm("确定要移除《" + title + "》吗?");
+            })
+
+            /* 在清空购物车前，弹出确认框，只有点击确定才会执行后续操作 */
+            $(".clear").click(function () {
+                return confirm("确定要清空购物车吗?");
             })
 
             /* 监听input值的变化情况，当输入值与原有值不一致时，弹出确认框。点击确定后使用Ajax异步修改。 */
@@ -113,7 +115,7 @@
                 <br><br>
 
                 <a href="index?method=getBooks">继续购物</a> &nbsp;&nbsp;
-                <a href="index?method=shoppingCart&cartAction=clear">清空购物车</a> &nbsp;&nbsp;
+                <a href="index?method=shoppingCart&cartAction=clear" class="clear">清空购物车</a> &nbsp;&nbsp;
                 <a href="index?method=shoppingCart&cartAction=toPay">支付</a>
             </c:otherwise>
         </c:choose>

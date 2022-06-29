@@ -4,6 +4,7 @@
 <head>
     <title>《${requestScope.book.title}》的详细信息</title>
     <%@ include file="/common/param.jsp" %>
+    <script src="jquery/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
