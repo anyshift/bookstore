@@ -135,6 +135,9 @@ public class ShoppingCartUtils {
         }
         tradeItemDAOImpl.batchSave(tradeItems);
 
+        /* 验证ThreadLocal的事务处理结果 */
+        int i = 1 / 0;
+
         //5、清空购物车
         shoppingCart.clear();
 

@@ -35,7 +35,8 @@ public class BaseDAO<T> implements DAO<T> {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            connection = JDBCUtils.getConnection();
+            //connection = JDBCUtils.getConnection();
+            connection = JDBCUtils.getConnectionByThreadLocal(); //采用ThreadLocal
             ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); //Statement.RETURN_GENERATED_KEYS可以获取到sql语句执行后影响的关键字集
 
             for (int i = 0; i < args.length; i++) {
@@ -49,10 +50,17 @@ public class BaseDAO<T> implements DAO<T> {
                 id = rs.getLong(1);
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e); /* 抛给TransactionFilter处理，一般是事务回滚 */
         } finally {
-            JDBCUtils.close(connection, ps, rs);
-        }
+            try {
+                ps.close();
+                rs.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }/* finally {
+            JDBCUtils.close(connection, ps, rs); 已被 JDBCUtils.commitAndClose() 或 JDBCUtils.rollbackAndClose() 关闭，无需再关闭，否则会报错
+        }*/
         return id;
     }
 
@@ -65,13 +73,14 @@ public class BaseDAO<T> implements DAO<T> {
     public void update(String sql, Object... args) {
         Connection connection = null;
         try {
-            connection = JDBCUtils.getConnection();
+            //connection = JDBCUtils.getConnection();
+            connection = JDBCUtils.getConnectionByThreadLocal(); //采用ThreadLocal
             queryRunner.update(connection, sql, args);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            JDBCUtils.close(connection);
-        }
+            throw new RuntimeException(e); /* 抛给TransactionFilter处理，一般是事务回滚 */
+        }/* finally {
+            JDBCUtils.close(connection); 已被 JDBCUtils.commitAndClose() 或 JDBCUtils.rollbackAndClose() 关闭，无需再关闭，否则会报错
+        }*/
     }
 
     /**
@@ -85,13 +94,14 @@ public class BaseDAO<T> implements DAO<T> {
         Connection connection = null;
         T query = null;
         try {
-            connection = JDBCUtils.getConnection();
+            //connection = JDBCUtils.getConnection();
+            connection = JDBCUtils.getConnectionByThreadLocal(); //采用ThreadLocal
             query = queryRunner.query(connection, sql, new BeanHandler<>(clazz), args);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            JDBCUtils.close(connection);
-        }
+            throw new RuntimeException(e); /* 抛给TransactionFilter处理，一般是事务回滚 */
+        }/* finally {
+            JDBCUtils.close(connection); 已被 JDBCUtils.commitAndClose() 或 JDBCUtils.rollbackAndClose() 关闭，无需再关闭，否则会报错
+        }*/
         return query;
     }
 
@@ -106,13 +116,14 @@ public class BaseDAO<T> implements DAO<T> {
         Connection connection = null;
         List<T> list = null;
         try {
-            connection = JDBCUtils.getConnection();
+            //connection = JDBCUtils.getConnection();
+            connection = JDBCUtils.getConnectionByThreadLocal(); //采用ThreadLocal
             list = queryRunner.query(connection, sql, new BeanListHandler<>(clazz), args);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            JDBCUtils.close(connection);
-        }
+            throw new RuntimeException(e); /* 抛给TransactionFilter处理，一般是事务回滚 */
+        }/* finally {
+            JDBCUtils.close(connection); 已被 JDBCUtils.commitAndClose() 或 JDBCUtils.rollbackAndClose() 关闭，无需再关闭，否则会报错
+        }*/
         return list;
     }
 
@@ -128,13 +139,14 @@ public class BaseDAO<T> implements DAO<T> {
         Connection connection = null;
         V value;
         try {
-            connection = JDBCUtils.getConnection();
+            //connection = JDBCUtils.getConnection();
+            connection = JDBCUtils.getConnectionByThreadLocal(); //采用ThreadLocal
             value = (V)queryRunner.query(connection, sql, new ScalarHandler(), args);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            JDBCUtils.close(connection);
-        }
+            throw new RuntimeException(e); /* 抛给TransactionFilter处理，一般是事务回滚 */
+        }/* finally {
+            JDBCUtils.close(connection); 已被 JDBCUtils.commitAndClose() 或 JDBCUtils.rollbackAndClose() 关闭，无需再关闭，否则会报错
+        }*/
         return value;
     }
 
@@ -147,12 +159,13 @@ public class BaseDAO<T> implements DAO<T> {
     public void batch(String sql, Object[]... args) {
         Connection connection = null;
         try {
-            connection = JDBCUtils.getConnection();
+            //connection = JDBCUtils.getConnection();
+            connection = JDBCUtils.getConnectionByThreadLocal(); //采用ThreadLocal
             queryRunner.batch(connection, sql, args);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            JDBCUtils.close(connection);
-        }
+            throw new RuntimeException(e); /* 抛给TransactionFilter处理，一般是事务回滚 */
+        }/* finally {
+            JDBCUtils.close(connection); 已被 JDBCUtils.commitAndClose() 或 JDBCUtils.rollbackAndClose() 关闭，无需再关闭，否则会报错
+        }*/
     }
 }

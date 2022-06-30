@@ -5,6 +5,27 @@ import java.sql.*;
 import java.util.Properties;
 
 public class JDBCUtils {
+    private static ThreadLocal<Connection> threadLocal = new ThreadLocal<>();
+
+    /**
+     * 采用ThreadLocal获取数据库连接
+     * @return
+     */
+    public static Connection getConnectionByThreadLocal() {
+        Connection connection = threadLocal.get();
+        if (connection == null) {
+            try {
+                connection = JDBCUtils.getConnection();
+                threadLocal.set(connection);
+                connection.setAutoCommit(false);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+        }
+        return connection;
+    }
+
     public static Connection getConnection() {
         InputStream is = null;
         Properties properties = null;
@@ -26,6 +47,42 @@ public class JDBCUtils {
             throw new RuntimeException(e);
         }
         return connection;
+    }
+
+    public static void commitAndClose() {
+        Connection connection = threadLocal.get();
+        if (connection != null) {
+            try {
+                connection.commit();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } finally {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        threadLocal.remove(); /* threadLocal用完要remove */
+    }
+
+    public static void rollbackAndClose() {
+        Connection connection = threadLocal.get();
+        if (connection != null) {
+            try {
+                connection.rollback();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } finally {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        threadLocal.remove(); /* threadLocal用完要remove */
     }
 
     public static void close(Connection connection) {

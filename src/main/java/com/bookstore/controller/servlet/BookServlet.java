@@ -29,16 +29,17 @@ public class BookServlet extends HttpServlet {
 
         try {
 
-//          获取BookService对象中与methodFromURL同名的方法
+            /* 获取BookService对象中与methodFromURL同名的方法 */
             Method method = bookService.getClass().getDeclaredMethod(methodFromURL, HttpServletRequest.class, HttpServletResponse.class);
 
             method.setAccessible(true);
 
-//          反射，方法调用对象。可以简单理解为对象调用方法：bookService调用method
+            /* 反射，方法调用对象。可以简单理解为对象调用方法：bookService调用method */
             method.invoke(bookService, request, response);
+
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new RuntimeException(e); /* 抛出异常给 TransactionFilter 处理 */
         }
     }
 }
