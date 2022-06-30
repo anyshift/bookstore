@@ -2,7 +2,7 @@
 
 ----
 
-![](https://img.shields.io/badge/JDK-17-yellow)![](https://img.shields.io/badge/IDE-IntelliJ_IDEA-red)![](https://img.shields.io/badge/Database-MySQL-green)
+![](https://img.shields.io/badge/JDK-17-yellow) ![](https://img.shields.io/badge/IDE-IntelliJ_IDEA-red) ![](https://img.shields.io/badge/Database-MySQL-green)
 
 #### 描述
 
