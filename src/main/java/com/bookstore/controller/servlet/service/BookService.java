@@ -7,6 +7,7 @@ import com.bookstore.controller.webpage.PriceLimit;
 import com.bookstore.model.Book;
 import com.bookstore.model.ShoppingCart;
 import com.bookstore.model.ShoppingCartItem;
+import com.bookstore.model.User;
 import com.google.gson.Gson;
 
 import javax.servlet.ServletException;
@@ -210,15 +211,18 @@ public class BookService extends HttpServlet {
                 response.sendRedirect("index?method=getBooks"); //那肯定要转到书城首页
             } else {
                 String userNameFromURL = request.getParameter("userName");
-                String accountIDFromURL = request.getParameter("accountID");
+                String passwordFromURL = request.getParameter("password");
 
-                StringBuffer errorInfo = ShoppingCartUtils.validatePayForm(userNameFromURL, accountIDFromURL);
+                StringBuffer errorInfo = ShoppingCartUtils.validatePayForm(userNameFromURL, passwordFromURL);
                 if (errorInfo.toString().equals("")) {
 
-                    errorInfo = ShoppingCartUtils.validatePayFormUserInfo(userNameFromURL, accountIDFromURL);
+                    errorInfo = ShoppingCartUtils.validatePayFormUserInfo(userNameFromURL, passwordFromURL);
                     if (errorInfo.toString().equals("")) {
 
-                        errorInfo = ShoppingCartUtils.validateBalanceByAccountID(request, accountIDFromURL);
+                        UserService userService = new UserService();
+                        User user = userService.getUserByUserName(userNameFromURL);
+                        String accountId = user.getAccountId();
+                        errorInfo = ShoppingCartUtils.validateBalanceByAccountID(request, accountId);
                         if (errorInfo.toString().equals("")) {
                             errorInfo = ShoppingCartUtils.validateStock(request);
                         }
@@ -229,7 +233,7 @@ public class BookService extends HttpServlet {
                     request.setAttribute("errorInfo", errorInfo); //将错误信息添加到Attribute中
                     request.getRequestDispatcher("/WEB-INF/view/deal.jsp").forward(request, response); //转至支付页面，此时的支付页面会显示具体的错误详情
                 } else { //如果判断环节没有出现错误
-                    ShoppingCartUtils.pay(request, userNameFromURL, accountIDFromURL); //执行具体的支付功能
+                    ShoppingCartUtils.pay(request, userNameFromURL, passwordFromURL); //执行具体的支付功能
                     request.getRequestDispatcher("/WEB-INF/view/dealSuccess.jsp").forward(request, response);
                 }
             }

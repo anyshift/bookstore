@@ -29,8 +29,8 @@
                         <td><input type="text" name="userName"/></td>
                     </tr>
                     <tr>
-                        <td style="background-color: beige">信用卡ID:</td>
-                        <td><input type="text" name="accountID"/></td>
+                        <td style="background-color: beige">信用卡密码:</td>
+                        <td><input type="text" name="password"/></td>
                     </tr>
                     <tr>
                         <td style="background-color: #e6ecf4"><button style="width: 90%; margin-left: 0.3em;"><a href="index?method=shoppingCart" style="text-decoration: none; color: black">取消支付</a></button></td>

@@ -55,19 +55,19 @@ public class ShoppingCartUtils {
             errorInfo.append("请填写信用卡姓名<br>");
         }
         if(accountID == null | accountID.trim().equals("")){
-            errorInfo.append("请填写信用卡ID<br>");
+            errorInfo.append("请填写信用卡密码<br>");
         }
         return errorInfo;
     }
 
     //支付页面填写的用户名和账号ID信息验证
-    public static StringBuffer validatePayFormUserInfo(String formUserName, String formAccountID) {
+    public static StringBuffer validatePayFormUserInfo(String formUserName, String passwordFromURL) {
         UserService userService = new UserService();
         User user = userService.getUserByUserName(formUserName);
         StringBuffer errorInfo = new StringBuffer("");
         if (user != null) {
-            String trueUserID = user.getAccountId();
-            if(!trueUserID.trim().equals(formAccountID)) {
+            String password = user.getPassword();
+            if(!password.trim().equals(passwordFromURL)) {
                 errorInfo.append("用户名与密码不匹配");
             }
         }
