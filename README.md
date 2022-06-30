@@ -1,5 +1,4 @@
 ## 书城 - 基于JavaWeb实现的在线购书网
-----
 
 ![](https://img.shields.io/badge/JDK-17-yellow) ![](https://img.shields.io/badge/IDE-IntelliJ_IDEA-red) ![](https://img.shields.io/badge/Database-MySQL-green)
 
