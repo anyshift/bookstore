@@ -70,7 +70,7 @@
         </tr>
         <c:forEach items="${requestScope.books.bookList}" var="book">
             <tr>
-                <td style="width: 150px;">
+                <td style="width: 190px;">
                     <a href="index?method=getBook&bookID=${book.getBookId()}&pageNum=${requestScope.books.currentPageNum}">《${book.title}》</a>
                     <br/> &nbsp; <span style="font-size: 14px">作者: ${book.author}</span>
                 </td>
