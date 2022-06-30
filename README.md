@@ -1,11 +1,9 @@
 ### 书城 - 基于JavaWeb实现的在线购书网
-
 ----
 
 ![](https://img.shields.io/badge/JDK-17-yellow) ![](https://img.shields.io/badge/IDE-IntelliJ_IDEA-red) ![](https://img.shields.io/badge/Database-MySQL-green)
 
 #### 描述
-
 ----
 
 书城项目涉及的内容有 Java、Mysql、JDBC、DBUtils、C3P0、JavaWEB、JQuery、Ajax、JSON等。涉及到的编程思想有：面向接口编程、通用翻页、DAO、反射等。
@@ -13,7 +11,6 @@
 开发所需环境：JDK、Tomcat、Mysql。
 
 #### 已实现
-
 ----
 
 - [x] 书籍展示、查看书籍详情
@@ -26,7 +23,6 @@
 - [x] 事务管理
 
 #### 待实现
-
 ----
 
 - [ ] 管理员
@@ -36,13 +32,11 @@
 - [ ] 查看购买记录
 
 #### 阅读建议
-
 ----
 
 先看model部分，把数据库结构缕清。再看DAO部分，大部分操作都需要通过DAO来完成。其中DAO是接口，由BaseDAO来实现，剩余的DAO实现皆由BaseDAO辅助完成。servlet包中的BookServlet是入口，由其子包service中的BookService完成绝大部分页面功能。
 
 #### 目录结构
-
 ----
 
 ```
@@ -123,19 +117,18 @@
 ```
 
 #### 部分截图
+----
+
+![](https://i.drop.cm/a3c9f5354acded33d28dafeee.png)](https://i.drop.cm/29085db6cf14fb1e416752bba.png)
 
 ----
 
-![](https://i.drop.cm/a3c9f5354acded33d28dafeee.png)
+![](https://i.drop.cm/d2e3b7725344ffa087cfa9cef.png)](https://i.drop.cm/1308ef54f7c9d4f3abe69439d.png)
 
 ----
 
-![](https://i.drop.cm/d2e3b7725344ffa087cfa9cef.png)
+![](https://i.drop.cm/133481d81de03e9317a6f63c6.png)](https://i.drop.cm/f96de909052cf84393683e357.png)
 
 ----
 
-![](https://i.drop.cm/133481d81de03e9317a6f63c6.png)
-
-----
-
-![](https://i.drop.cm/0c399c18a4b069dde7bf710f8.png)
+![](https://i.drop.cm/0c399c18a4b069dde7bf710f8.png)](https://i.drop.cm/e30c64be73926c456b7877abe.png)
