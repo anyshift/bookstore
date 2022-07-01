@@ -8,6 +8,7 @@ import com.bookstore.model.ShoppingCartItem;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class BookDAOTest {
@@ -56,5 +57,32 @@ public class BookDAOTest {
         ShoppingCartItem item = new ShoppingCartItem(book, 1);
         list.add(item);
         bookDAO.batchUpdateStockNumberAndSalesAmount(list);
+    }
+
+    @Test
+    public void testSearchBookByKeyword_1() {
+        List<Book> list = bookDAO.searchBookByKeyword("Java");
+        list.forEach(System.out::println);
+    }
+
+    @Test
+    public void testSearchBookByKeyword_2() {
+        PriceLimit priceLimit = new PriceLimit(75, 80, 1);
+        Page<Book> page = bookDAO.getPageByKeyword(priceLimit,"Java");
+        System.out.println(page.getCurrentPageNum()); //1
+        System.out.println(page.getTotalPageNumber()); //3
+        System.out.println(page.getItemSizePerPage()); //5
+
+
+        System.out.println();
+
+        List<Book> bookList = page.getBookList();
+        System.out.println(bookList.size());
+        System.out.println();
+
+        Iterator<Book> iterator = bookList.iterator();
+        while (iterator.hasNext()){
+            System.out.println(iterator.next());
+        }
     }
 }

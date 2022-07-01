@@ -27,7 +27,6 @@ public class BookService extends HttpServlet {
 
     //获取所有书籍，然后添加到ServletContext的Attribute中，JSP页面就可以获取这些书籍Attribute
     protected void getBooks(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         String minPriceStr = request.getParameter("minPrice");
         String maxPriceStr = request.getParameter("maxPrice");
         String pageNumStr = request.getParameter("pageNum");
@@ -61,6 +60,7 @@ public class BookService extends HttpServlet {
     //获取单本书籍，用于书籍详情展示
     protected void getBook(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String bookIdFromURL = request.getParameter("bookID");
+        String keyword = request.getParameter("keyword");
 
         int bookID = 0;
         Book book = null;
@@ -72,12 +72,51 @@ public class BookService extends HttpServlet {
         if (bookID > 0) {
             book = bookDAO.getBook(bookID);
             if (book == null) {
-                response.sendRedirect("index?method=getBooks");
+                if (keyword == null || keyword.isEmpty()) {
+                    response.sendRedirect("index?method=getBooks");
+                } else {
+                    response.sendRedirect("index?method=searchBooks");
+                }
                 return;
             }
             request.setAttribute("book", book);
             request.getRequestDispatcher("/WEB-INF/view/bookInfo.jsp").forward(request, response);
-        } else response.sendRedirect("index?method=getBooks");
+        } else {
+            if (keyword == null || keyword.isEmpty()) {
+                response.sendRedirect("index?method=getBooks");
+            } else {
+                response.sendRedirect("index?method=searchBooks");
+            }
+        }
+    }
+
+    public void searchBooks(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String keyword = request.getParameter("keyword");
+        String minPriceStr = request.getParameter("minPrice");
+        String maxPriceStr = request.getParameter("maxPrice");
+        String pageNumStr = request.getParameter("pageNum");
+
+        int minPrice = 0;
+        int currentPageNum = 1;
+        int maxPrice = Integer.MAX_VALUE;
+
+        try { minPrice = Integer.parseInt(minPriceStr);} catch (NumberFormatException e) {}
+
+        try { maxPrice = Integer.parseInt(maxPriceStr); } catch (NumberFormatException e) {}
+
+        try { currentPageNum = Integer.parseInt(pageNumStr); } catch (NumberFormatException e) {}
+
+        PriceLimit pl = new PriceLimit(minPrice, maxPrice, currentPageNum);
+        Page<Book> page = null;
+        if (keyword == null || keyword.isEmpty()) {
+            page = bookDAO.getPage(pl);
+            request.setAttribute("books", page);
+            response.sendRedirect("index?method=getBooks");
+        } else {
+            page = bookDAO.getPageByKeyword(pl, keyword);
+            request.setAttribute("books", page);
+            request.getRequestDispatcher("/WEB-INF/view/searched.jsp").forward(request, response);
+        }
     }
 
     //实现购物车的所有功能，如列出购物车所有购物项、添加书籍到购物车、购物项详情、清空购物车、移除购物项、支付
@@ -92,8 +131,13 @@ public class BookService extends HttpServlet {
 
         //列出购物车所有购物项
         if ("list".equals(cartAction)) {
-            if (ShoppingCartUtils.getShoppingCart(request).isEmpty()) { //购物车都没有的话
-                response.sendRedirect("index?method=getBooks"); //那肯定要转到书城首页
+            String keyword = request.getParameter("keyword");
+            if (ShoppingCartUtils.getShoppingCart(request).isEmpty()) {
+                if (keyword == null || keyword.isEmpty()) {
+                    response.sendRedirect("index?method=getBooks");
+                } else {
+                    response.sendRedirect("index?method=searchBooks");
+                }
             } else {
                 request.getRequestDispatcher("/WEB-INF/view/shoppingCart.jsp").forward(request, response);
             }
@@ -102,6 +146,7 @@ public class BookService extends HttpServlet {
         //添加书籍到购物车
         if ("add".equals(cartAction)) {
             String bookIdFromURl = request.getParameter("bookID");
+            String keyword = request.getParameter("keyword");
             int bookID = 0;
             Book book = null;
 
@@ -117,20 +162,27 @@ public class BookService extends HttpServlet {
                     ShoppingCart shoppingCart = ShoppingCartUtils.getShoppingCart(request);
                     boolean add = ShoppingCartUtils.addToShoppingCart(bookID, shoppingCart);
                     if (add) {
-                        getBooks(request, response);
+                        if (keyword == null || keyword.isEmpty()) {
+                            getBooks(request, response);
+                        } else searchBooks(request, response);
                     } else {
                         request.getRequestDispatcher("/WEB-INF/view/errors/errorAddToShoppingCart.jsp").forward(request, response);
                     }
                 }
             } else {
-                response.sendRedirect("index?method=getBooks");
+                if (keyword == null || keyword.isEmpty()) {
+                    response.sendRedirect("index?method=getBooks");
+                } else response.sendRedirect("index?method=searchBooks");
             }
         }
 
         //购物车里的购物项详情
         if ("bookInfo".equals(cartAction)) {
-            if (ShoppingCartUtils.getShoppingCart(request).isEmpty()) { //购物车都没有的话
-                response.sendRedirect("index?method=getBooks"); //那肯定要转到书城首页
+            String keyword = request.getParameter("keyword");
+            if (ShoppingCartUtils.getShoppingCart(request).isEmpty()) {
+                if (keyword == null || keyword.isEmpty()) {
+                    response.sendRedirect("index?method=getBooks");
+                } else response.sendRedirect("index?method=searchBooks");
             } else {
                 String bookIdFromURL = request.getParameter("bookID");
                 int bookID = 0;
@@ -140,8 +192,7 @@ public class BookService extends HttpServlet {
                 ShoppingCartItem item = null;
                 try {
                     bookID = Integer.parseInt(bookIdFromURL);
-                } catch (NumberFormatException e) {
-                }
+                } catch (NumberFormatException e) {}
 
                 if (bookID > 0) {
                     shoppingCart = ShoppingCartUtils.getShoppingCart(request);
@@ -154,15 +205,22 @@ public class BookService extends HttpServlet {
                         request.setAttribute("book", book);
                         request.getRequestDispatcher("/WEB-INF/view/bookInfoFromCart.jsp").forward(request, response);
                     }
-                } else response.sendRedirect("index?method=getBooks");
+                } else {
+                    if (keyword == null || keyword.isEmpty()) {
+                        response.sendRedirect("index?method=getBooks");
+                    } else response.sendRedirect("index?method=searchBooks");
+                }
             }
         }
 
         //清空购物车
         if ("clear".equals(cartAction)) {
+            String keyword = request.getParameter("keyword");
             ShoppingCart shoppingCart = ShoppingCartUtils.getShoppingCart(request); //在session中获取购物车对象
-            if (shoppingCart.isEmpty()) { //购物车都没有的话
-                response.sendRedirect("index?method=getBooks"); //那肯定要转到书城首页
+            if (shoppingCart.isEmpty()) {
+                if (keyword == null || keyword.isEmpty()) {
+                    response.sendRedirect("index?method=getBooks");
+                } else response.sendRedirect("index?method=searchBooks");
             } else {
                 ShoppingCartUtils.clearShoppingCart(shoppingCart); //清空购物车
                 request.getRequestDispatcher("/WEB-INF/view/shoppingCart.jsp").forward(request, response);
@@ -172,8 +230,11 @@ public class BookService extends HttpServlet {
         //移除购物项
         if ("remove".equals(cartAction)) {
             ShoppingCart shoppingCart = ShoppingCartUtils.getShoppingCart(request);
-            if (shoppingCart.isEmpty()) { //购物车都没有的话
-                response.sendRedirect("index?method=getBooks"); //那肯定要转到书城首页
+            String keyword = request.getParameter("keyword");
+            if (shoppingCart.isEmpty()) {
+                if (keyword == null || keyword.isEmpty()) {
+                    response.sendRedirect("index?method=getBooks");
+                } else response.sendRedirect("index?method=searchBooks");
             } else {
                 String bookIdFromUrl = request.getParameter("bookID");
                 int bookID = 0;
@@ -186,7 +247,9 @@ public class BookService extends HttpServlet {
                 if (books.containsKey(bookID)) {
                     books.remove(bookID);
                     if (shoppingCart.isEmpty()) { //如果移除后购物车为空
-                        request.getRequestDispatcher("/WEB-INF/view/shoppingCart.jsp").forward(request, response);
+                        if (keyword == null || keyword.isEmpty()) {
+                            request.getRequestDispatcher("/WEB-INF/view/shoppingCart.jsp").forward(request, response);
+                        } else request.getRequestDispatcher("/WEB-INF/view/searchBooks.jsp").forward(request, response);
                     } else {
                         response.sendRedirect("index?method=shoppingCart");
                     }
@@ -198,8 +261,11 @@ public class BookService extends HttpServlet {
 
         //转发至支付页面
         if ("toPay".equals(cartAction)) {
-            if (ShoppingCartUtils.getShoppingCart(request).isEmpty()) { //购物车都没有的话
-                response.sendRedirect("index?method=getBooks"); //那肯定要转到书城首页
+            String keyword = request.getParameter("keyword");
+            if (ShoppingCartUtils.getShoppingCart(request).isEmpty()) {
+                if (keyword == null || keyword.isEmpty()) {
+                    response.sendRedirect("index?method=getBooks");
+                } else response.sendRedirect("index?method=searchBooks");
             } else {
                 request.getRequestDispatcher("/WEB-INF/view/deal.jsp").forward(request, response);
             }
@@ -207,8 +273,11 @@ public class BookService extends HttpServlet {
 
         //支付的一些判断以及完成支付。模拟的是信用卡，没有使用用户名密码组合，而是用户名和账号ID组合。
         if ("pay".equals(cartAction)) {
-            if (ShoppingCartUtils.getShoppingCart(request).isEmpty()) { //购物车都没有的话
-                response.sendRedirect("index?method=getBooks"); //那肯定要转到书城首页
+            String keyword = request.getParameter("keyword");
+            if (ShoppingCartUtils.getShoppingCart(request).isEmpty()) {
+                if (keyword == null || keyword.isEmpty()) {
+                    response.sendRedirect("index?method=getBooks");
+                } else response.sendRedirect("index?method=searchBooks");
             } else {
                 String userNameFromURL = request.getParameter("userName");
                 String passwordFromURL = request.getParameter("password");

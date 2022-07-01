@@ -1,17 +1,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: tsaioil
-  Date: 2022/4/28
-  Time: 15:09
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>书籍详情</title>
     <script src="jquery/jquery-3.6.0.min.js"></script>
-    <%@ include file="/common/param.jsp" %>
+    <%@ include file="/common/common.jsp" %>
 </head>
 <body>
 
@@ -26,7 +19,7 @@
             <tr>
                 <td style="background-color: beige">书名</td>
                 <td>《${requestScope.book.title}》</td>
-                <td rowspan="7"><a href="index?method=shoppingCart&cartAction=list" style="text-decoration: none;">返回购物车</a></td>
+                <td rowspan="7"><a href="index?method=shoppingCart&cartAction=list&pageNum=${param.pageNum}" style="text-decoration: none;">返回购物车</a></td>
             </tr>
             <tr>
                 <td style="background-color: beige">作者</td>

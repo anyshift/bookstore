@@ -5,6 +5,7 @@ import com.bookstore.controller.servlet.service.BookService;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 
 /**
@@ -15,7 +16,7 @@ public class BookServlet extends HttpServlet {
     BookService bookService = new BookService();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         doPost(request, response);
     }
 
@@ -23,10 +24,11 @@ public class BookServlet extends HttpServlet {
      * index.jsp默认启动时的参数是 (http://xxx/bookServlet?method=getBooks) getBooks，会执行BookService类中getBooks方法，获取所有书籍并展示。
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+        request.setCharacterEncoding("UTF-8");
+        response.setHeader("Content-Type", "text/html; charset=UTF-8");
 
         String methodFromURL = request.getParameter("method");
-
         try {
 
             /* 获取BookService对象中与methodFromURL同名的方法 */

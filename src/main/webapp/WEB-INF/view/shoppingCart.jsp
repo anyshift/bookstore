@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8"  %>
 <base href="${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/">
 <html>
 <head>
@@ -7,7 +7,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <script src="jquery/jquery-3.6.0.min.js"></script>
     <script src="js/validate-cart-quantity.js"></script>
-    <%@ include file="/common/param.jsp" %>
+    <%@ include file="/common/common.jsp" %>
     <style>
         a {
             text-decoration: none;
@@ -18,11 +18,12 @@
     </style>
 </head>
 <body>
+<input type="hidden" name="keyword" value="${param.keyword}"/>
     <center>
         <br><br>
         <c:choose>
             <c:when test="${empty sessionScope.shoppingCart.books}">
-                购物车已清空，<a href="index?method=getBooks">继续购物</a>
+                购物车已清空，<a href="index?method=getBooks&pageNum=${param.pageNum}">继续购物</a>
             </c:when>
             <c:otherwise>
                 <div id="bookNumber">当前购物车共有 ${sessionScope.shoppingCart.bookNumber} 本书</div>
@@ -38,7 +39,7 @@
                     <c:if test="${!empty sessionScope.shoppingCart.bookNumber}">
                         <c:forEach items="${sessionScope.shoppingCart.items}" var="item">
                             <tr>
-                                <td><a href="index?method=shoppingCart&cartAction=bookInfo&bookID=${item.book.bookId}">${item.book.title}</a></td>
+                                <td><a href="index?method=shoppingCart&cartAction=bookInfo&bookID=${item.book.bookId}&pageNum=${param.pageNum}">${item.book.title}</a></td>
                                 <td style="padding: unset">
                                     <input type="text" class="${item.quantity}" size="2" name="${item.book.bookId}" value="${item.quantity}" style="text-align: center"/>
                                 </td>
@@ -55,9 +56,16 @@
                 </table>
                 <br><br>
 
-                <a href="index?method=getBooks">继续购物</a> &nbsp;&nbsp;
+                <c:choose>
+                    <c:when test="${empty param.keyword}">
+                        <a href="index?method=getBooks&pageNum=${param.pageNum}">继续购物</a> &nbsp;&nbsp;
+                    </c:when>
+                    <c:otherwise>
+                        <a href="index?method=searchBooks&pageNum=${param.pageNum}">继续购物</a> &nbsp;&nbsp;
+                    </c:otherwise>
+                </c:choose>
                 <a href="index?method=shoppingCart&cartAction=clear" class="clear">清空购物车</a> &nbsp;&nbsp;
-                <a href="index?method=shoppingCart&cartAction=toPay">支付</a>
+                <a href="index?method=shoppingCart&cartAction=toPay&pageNum=${param.pageNum}">支付</a>
             </c:otherwise>
         </c:choose>
         <br><br>

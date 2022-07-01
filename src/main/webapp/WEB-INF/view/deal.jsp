@@ -4,7 +4,7 @@
 <head>
     <title>交易前台</title>
     <script src="jquery/jquery-3.6.0.min.js"></script>
-    <%@ include file="/common/param.jsp" %>
+    <%@ include file="/common/common.jsp" %>
 </head>
 <body>
 
@@ -33,7 +33,7 @@
                         <td><input type="text" name="password"/></td>
                     </tr>
                     <tr>
-                        <td style="background-color: #e6ecf4"><button style="width: 90%; margin-left: 0.3em;"><a href="index?method=shoppingCart" style="text-decoration: none; color: black">取消支付</a></button></td>
+                        <td style="background-color: #e6ecf4"><button style="width: 90%; margin-left: 0.3em;"><a href="index?method=shoppingCart&pageNum=${param.pageNum}" style="text-decoration: none; color: black">取消支付</a></button></td>
                         <td style="background-color: #e6ecf4"><input type="submit" value="支付" style="width: 100%"/></td>
                     </tr>
                 </table>

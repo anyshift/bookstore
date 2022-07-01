@@ -23,6 +23,11 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
         return query(sql, bookID);
     }
 
+    public List<Book> searchBookByKeyword(String keyword) {
+        String sql = "SELECT * from mybooks where Title LIKE CONCAT('%', ?, '%')";
+        return queryForList(sql, keyword);
+    }
+
     /**
      * 获取对应bookID的库存量
      * @param bookID 书籍ID
@@ -45,6 +50,11 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
         return getSingleValue(sql, pl.getMinPrice(), pl.getMaxPrice());
     }
 
+    public long getTotalBooksNumberByKeyword(PriceLimit pl, String keyword) {
+        String sql = "select count(id) from mybooks where price >= ? and price <= ? AND Title LIKE CONCAT('%', ?, '%')";
+        return getSingleValue(sql, pl.getMinPrice(), pl.getMaxPrice(), keyword);
+    }
+
     /**
      * 获取价格区间内的Page对象。获取的Page对象可以获取当前页面、上下页、判断是否有上下页、获取总页数、获取每页展示数
      * @param pl 价格区间
@@ -64,6 +74,19 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
         return page;
     }
 
+    public Page<Book> getPageByKeyword(PriceLimit pl, String keyword) {
+//      创建一个Page对象。得到的Page对象还需对Page对象里的totalItemNumber、bookList赋值，这样才得到一个属性值都有值的Page对象
+        Page<Book> page = new Page<>(pl.getCurrentPageNumber());
+//      给Page对象设置总书籍数
+        page.setTotalItemNumber(getTotalBooksNumberByKeyword(pl, keyword));
+//      设置pl里的当前页数
+        pl.setCurrentPageNumber(page.getCurrentPageNum());
+//      让Page对象设置书籍集合
+        page.setBookList(getBookListByKeyword(pl, page.getItemSizePerPage(), keyword));
+
+        return page;
+    }
+
     /**
      * 获取在价格区间内的书籍集合，分页展示在网页上
      * @param pl 价格区间
@@ -72,8 +95,7 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
      */
     @Override
     public List<Book> getBookList(PriceLimit pl, int itemSizePerPage) {
-        String sql = "SELECT id, Author, Title, Price, Publishingdate, Salesamount, " +
-                "Storenumber, Remark FROM mybooks WHERE price <= ? AND price >= ? LIMIT ?, ?";
+        String sql = "SELECT * FROM mybooks WHERE Price <= ? AND Price >= ? LIMIT ?, ?";
 
         int begin;
         if (pl.getCurrentPageNumber() == 0) {
@@ -82,6 +104,17 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
 
         return queryForList(sql, pl.getMaxPrice(), pl.getMinPrice(),
                         begin, itemSizePerPage);
+    }
+
+    public List<Book> getBookListByKeyword(PriceLimit pl, int itemSizePerPage, String keyword) {
+        String sql = "SELECT * FROM mybooks WHERE Price <= ? AND Price >= ? AND Title LIKE CONCAT('%', ?, '%') LIMIT ?, ?";
+
+        int begin;
+        if (pl.getCurrentPageNumber() == 0) {
+            begin = 0;
+        } else begin = (pl.getCurrentPageNumber() - 1) * itemSizePerPage;
+
+        return queryForList(sql, pl.getMaxPrice(), pl.getMinPrice(), keyword, begin, itemSizePerPage);
     }
 
     /*
