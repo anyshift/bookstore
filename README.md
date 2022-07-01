@@ -18,14 +18,14 @@
 - [x] 移除购物车某书籍、清空购物车
 - [x] 支付、支付验证
 - [x] 事务管理
+- [x] 书籍搜索
 
 ### 😉 待实现
 
 - [ ] 管理员
-- [ ] 书籍的增删改
-- [ ] 用户登陆与注册
-- [ ] 书籍搜索
-- [ ] 查看购买记录
+- [ ] 书籍的增删改(管理员)
+- [ ] 登陆与注册
+- [ ] 查看购买记录(用户匹配)
 
 ### 🟦 ️阅读建议
 
@@ -92,6 +92,7 @@
     │   │   ├── bookInfo.jsp
     │   │   ├── bookInfoFromCart.jsp
     │   │   ├── books.jsp
+    │   │   ├── searched.jsp
     │   │   ├── deal.jsp
     │   │   ├── dealSuccess.jsp
     │   │   ├── errors
@@ -113,7 +114,11 @@
 ### 🔘 部分截图
 ----
 
-![](https://i.drop.cm/29085db6cf14fb1e416752bba.png)
+![](https://i.drop.cm/be2c23e899bcd3ed4a58aef00.png)
+
+----
+
+![](https://i.drop.cm/11bb7fb5da64baf389821d2d8.png)
 
 ----
 
