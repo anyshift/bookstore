@@ -56,11 +56,11 @@ public class BaseDAO<T> implements DAO<T> {
                 ps.close();
                 rs.close();
             } catch (SQLException e) {
+                e.printStackTrace();
                 throw new RuntimeException(e);
             }
-        }/* finally {
-            JDBCUtils.close(connection, ps, rs); 已被 JDBCUtils.commitAndClose() 或 JDBCUtils.rollbackAndClose() 关闭，无需再关闭，否则会报错
-        }*/
+        }
+        JDBCUtils.commitAndClose(); //因为取消了自动commit，所以insert完一定要commit，并且关闭connection以及remove ThreadLocal
         return id;
     }
 
@@ -78,9 +78,7 @@ public class BaseDAO<T> implements DAO<T> {
             queryRunner.update(connection, sql, args);
         } catch (SQLException e) {
             throw new RuntimeException(e); /* 抛给TransactionFilter处理，一般是事务回滚 */
-        }/* finally {
-            JDBCUtils.close(connection); 已被 JDBCUtils.commitAndClose() 或 JDBCUtils.rollbackAndClose() 关闭，无需再关闭，否则会报错
-        }*/
+        }
     }
 
     /**

@@ -10,13 +10,13 @@ public class AccountDAOImpl extends BaseDAO<Account> implements AccountDAO {
     }
 
     @Override
-    public Account getAccount(int id) {
+    public Account getAccount(long id) {
         String sql = "select accountid, balance from account where accountid = ?";
         return query(sql, id);
     }
 
     @Override
-    public void updateBalance(int id, float money) {
+    public void updateBalance(long id, float money) {
         String sql = "update account set balance=balance-" + money + " where accountid = ?";
         update(sql, id);
     }

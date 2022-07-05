@@ -3,5 +3,9 @@ package com.bookstore.controller.dao;
 import com.bookstore.model.User;
 
 public interface UserDAO {
-    User getUser(String userName); //根据用户名获取用户对象
+    User getUserByUserName(String userName);
+
+    User getUserByUserId(int userId);
+
+    long addUser(User user);
 }

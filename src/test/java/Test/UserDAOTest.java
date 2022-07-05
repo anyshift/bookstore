@@ -10,7 +10,18 @@ public class UserDAOTest {
 
     @Test
     public void testGetUser() {
-        User tom = userDAO.getUser("Tom");
-        System.out.println(tom);
+        User tom = userDAO.getUserByUserName("qwe");
+        System.out.println(tom.getUsername());
+        System.out.println(tom.getUserId());
+
+        User user = userDAO.getUserByUserId(2);
+        System.out.println(user.getIsAdmin());
+    }
+
+    @Test
+    public void testAddUser() {
+        User user = new User("Test","1234567890");
+        long l = userDAO.addUser(user);
+        System.out.println(l);
     }
 }

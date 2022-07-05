@@ -1,12 +1,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
-<base href="${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/">
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8"  %>
 <html>
 <head>
     <title>购书网</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <script src="jquery/jquery-3.6.0.min.js"></script>
-    <script src="js/validate-price.js"></script>
+    <%@ include file="/common/head.jsp"%>
+    <script src="/static/js/validate_price.js"></script>
     <%@ include file="/common/common.jsp" %>
     <style>
         a { text-decoration: none; }
@@ -38,7 +37,7 @@
                     return; //停止后续程序执行
                 }
 
-                window.location.href = "index?method=searchBooks&pageNum=" + pageNumber + "&" + $(":hidden").serialize();
+                window.location.href = "index?method=getBooks&pageNum=" + pageNumber + "&" + $(":hidden").serialize();
             });
 
             $(".cancel-filter").click(function () {
@@ -48,41 +47,60 @@
 
             $(".cancel-search").click(function () {
                 $("input[name=keyword]").val("");
-            })
+            });
+
         });
     </script>
 </head>
 <body>
-<input type="hidden" name="keyword" value="${param.keyword}"/>
+<div style="height: 20px;"></div>
 <center>
-    <br><br>
-    <form action="index?method=searchBooks" method="post">
-        <input size="20" type="text" name="keyword" value="${param.keyword}" placeholder="不太靠谱的搜一搜">
-        <c:choose>
-            <c:when test="${empty param.keyword}">
-                <input type="submit" value="搜索">
-            </c:when>
-            <c:otherwise>
-                <input type="submit" class="cancel-search" value="取消搜索">
-            </c:otherwise>
-        </c:choose>
-    </form>
-
-    <c:if test="${param.bookTitle != null}"> <%-- param是自带的，可以直接使用。用于访问URL中的参数 --%>
-        已将《${param.bookTitle}》加入到购物车
-        <br/><br/>
-    </c:if>
-
-    <c:if test="${!empty sessionScope.shoppingCart.books}">
-        <%-- bookNumber是ShoppingCart对象中的getBookNumber()方法，读取bean方法，省去get。（JSP JavaBean） --%>
-        当前购物车中共有 ${sessionScope.shoppingCart.bookNumber} 本书，<a href="index?method=shoppingCart&pageNum=${param.pageNum}">查看购物车</a>
-        <br/><br/>
-    </c:if>
-
-    <%-- -------------------------分割线------------------------- --%>
     <c:choose>
-        <c:when test="${empty requestScope.books.bookList}">未搜索到相关书籍</c:when>
-        <c:otherwise><br>
+        <c:when test="${empty requestScope.books.bookList}">书城无书</c:when>
+        <c:otherwise>
+            <form action="index?method=searchBooks" method="post">
+                <input size="20" type="text" name="keyword" value="${param.keyword}" placeholder="不太靠谱的搜一搜" style="padding: 2px;">
+                <c:choose>
+                    <c:when test="${empty param.keyword}">
+                        <input type="submit" value="搜索" style="padding: 0 6px;">
+                    </c:when>
+                    <c:otherwise>
+                        <input type="submit" class="cancel-search" value="取消搜索" style="padding: 0 6px;">
+                    </c:otherwise>
+                </c:choose>
+                <c:if test="${empty sessionScope.user.username}">
+                    <span style="margin: 0 100px"></span>
+                    <a target="_self" href="user?method=login" class="login">登陆</a>&nbsp;
+                    <a target="_self" href="user?method=register" class="signup">注册</a>
+                </c:if>
+                <c:if test="${not empty sessionScope.user.username}">
+                    <span style="margin: 0 35px"></span>
+                    <c:choose>
+                        <c:when test="${sessionScope.user.isAdmin == 1}">
+                            <a href="user?method=mySpace&name=${sessionScope.user.username}" class="admin_space">管理中心</a>&nbsp;
+                        </c:when>
+                        <c:otherwise>
+                            <a href="user?method=mySpace&name=${sessionScope.user.username}" class="user_space">个人中心</a>&nbsp;
+                        </c:otherwise>
+                    </c:choose>
+                    <a href="user?method=myOrder" class="order">我的订单</a>&nbsp;
+                    <a href="user?method=logout">退出登陆</a>
+                </c:if>
+            </form>
+
+            <c:if test="${param.bookTitle != null}"> <%-- param是自带的，可以直接使用。用于访问URL中的参数 --%>
+                已将《${param.bookTitle}》加入到购物车
+                <br><br>
+            </c:if>
+
+            <c:if test="${!empty sessionScope.shoppingCart.books}">
+                <%-- bookNumber是ShoppingCart对象中的getBookNumber()方法，读取bean方法，省去get。（JSP JavaBean） --%>
+                当前购物车中共有 ${sessionScope.shoppingCart.bookNumber} 本书，<a href="index?method=shoppingCart&pageNum=${param.pageNum}">查看购物车</a>
+                <br>
+            </c:if>
+
+            <%-- -------------------------分割线------------------------- --%>
+            <br>
             <table cellpadding="10" border="1px solid black" cellspacing="0">
                     <%-- books是Page对象， 迭代获取到的book是Book对象。因为Page<Book>。 --%>
                 <tr style="background-color: beige">
@@ -116,7 +134,7 @@
 
             <%-- -------------------------分割线------------------------- --%>
 
-            <form action="index?method=searchBooks&keyword=${param.keyword}" method="post">
+            <form action="index?method=getBooks" method="post">
                 <table>
                     <tr>
                         <td>
@@ -154,16 +172,16 @@
             </c:if>
 
             <c:if test="${requestScope.books.hasPrevPage}">
-                <a href="index?method=searchBooks">首页</a>
+                <a href="index?method=getBooks">首页</a>
                 &nbsp;&nbsp;
-                <a href="index?method=searchBooks&pageNum=${requestScope.books.prevPage}">上一页</a>
+                <a href="index?method=getBooks&pageNum=${requestScope.books.prevPage}">上一页</a>
                 &nbsp;&nbsp;
             </c:if>
 
             <c:if test="${requestScope.books.hasNextPage}">
-                <a href="index?method=searchBooks&pageNum=${requestScope.books.nextPage}">下一页</a>
+                <a href="index?method=getBooks&pageNum=${requestScope.books.nextPage}">下一页</a>
                 &nbsp;&nbsp;
-                <a href="index?method=searchBooks&pageNum=${requestScope.books.totalPageNumber}">末页</a>
+                <a href="index?method=getBooks&pageNum=${requestScope.books.totalPageNumber}">末页</a>
                 &nbsp;&nbsp;
             </c:if>
 
@@ -173,5 +191,6 @@
         </c:otherwise>
     </c:choose>
 </center>
+<br><br>
 </body>
 </html>

@@ -31,7 +31,6 @@ public class JDBCUtils {
         Properties properties = null;
         Connection connection = null;
         try {
-            //is = ClassLoader.getSystemClassLoader().getResourceAsStream("jdbc.properties");
             is = JDBCUtils.class.getClassLoader().getResourceAsStream("jdbc.properties");
             properties = new Properties();
             properties.load(is);
@@ -41,7 +40,7 @@ public class JDBCUtils {
             String url = properties.getProperty("url");
             String driveClass = properties.getProperty("driveClass"); //driveClass=com.mysql.cj.jdbc.Driver
 
-            Class.forName(driveClass);
+            Class.forName(driveClass); //注册驱动
             connection = DriverManager.getConnection(url, user, password);
         } catch (Exception e) {
             throw new RuntimeException(e);

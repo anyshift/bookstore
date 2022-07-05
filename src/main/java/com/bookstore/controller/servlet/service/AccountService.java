@@ -6,7 +6,7 @@ import com.bookstore.model.Account;
 public class AccountService {
     AccountDAOImpl accountDAO = new AccountDAOImpl();
 
-    public Account getAccount(int accountID) {
+    public Account getAccount(long accountID) {
         return accountDAO.getAccount(accountID);
     }
 }

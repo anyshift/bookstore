@@ -13,6 +13,15 @@
         <url-pattern>/index</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>UserServlet</servlet-name>
+        <servlet-class>com.bookstore.controller.servlet.UserServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserServlet</servlet-name>
+        <url-pattern>/user</url-pattern>
+    </servlet-mapping>
+
 
     <filter>
         <filter-name>TransactionFilter</filter-name>
@@ -34,7 +43,7 @@
 
     <error-page>
         <error-code>500</error-code>
-        <location>/errors/error-pay.jsp</location>
+        <location>/errors/error_500.jsp</location>
     </error-page>
 
 </web-app>

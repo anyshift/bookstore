@@ -1,6 +1,7 @@
 <script type="text/javascript">
     $(function () {
-        $("a:not(.delete,.clear,.cancel-1,.cancel-2)").each(function () {
+        $("a:not(.delete,.clear,.cancel-1,.cancel-2,.login,.signup,.logout,.admin_space," +
+            ".user_space,.order)").each(function () {
             this.onclick = function () {
                 window.location.href = this.href + "&" + $(":hidden").serialize();
                 return false;

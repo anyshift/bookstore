@@ -13,7 +13,7 @@ $(function () {
     })
 
     /* 监听input值的变化情况，当输入值与原有值不一致时，弹出确认框。点击确定后使用Ajax异步修改。 */
-    $(":text").change(function () {
+    $(":text:not(.search)").change(function () {
         let quantityValue = $.trim(this.value);
         let flag1 = false;
         let reg = /^\d+$/g;

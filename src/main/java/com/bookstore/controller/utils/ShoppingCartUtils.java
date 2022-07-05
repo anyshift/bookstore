@@ -5,7 +5,6 @@ import com.bookstore.controller.dao.Impl.BookDAOImpl;
 import com.bookstore.controller.dao.Impl.TradeDAOImpl;
 import com.bookstore.controller.dao.Impl.TradeItemDAOImpl;
 import com.bookstore.controller.servlet.service.AccountService;
-import com.bookstore.controller.servlet.service.UserService;
 import com.bookstore.model.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,37 +48,42 @@ public class ShoppingCartUtils {
     }
 
     //支付页面填写用户名和账号ID的表单域验证。用于判断填写的是不是为空
-    public static StringBuffer validatePayForm(String userName, String accountID) {
+    public static StringBuffer validateInputForm(String userName, String password) {
         StringBuffer errorInfo = new StringBuffer("");
-        if (userName == null | userName.trim().equals("")) {
-            errorInfo.append("请填写信用卡姓名<br>");
+        boolean userNameIsNullOrEmpty = userName == null || "".equals(userName.trim());
+        boolean passwordIsNullOrEmpty = password == null || "".equals(password.trim());
+        if (userNameIsNullOrEmpty && passwordIsNullOrEmpty) {
+            errorInfo.append("请填写用户名和密码<br>");
+            return errorInfo;
         }
-        if(accountID == null | accountID.trim().equals("")){
-            errorInfo.append("请填写信用卡密码<br>");
+        if (userNameIsNullOrEmpty) {
+            errorInfo.append("请填写用户名<br>");
+        }
+        if(passwordIsNullOrEmpty){
+            errorInfo.append("请填写密码<br>");
         }
         return errorInfo;
     }
 
     //支付页面填写的用户名和账号ID信息验证
     public static StringBuffer validatePayFormUserInfo(String formUserName, String passwordFromURL) {
-        UserService userService = new UserService();
-        User user = userService.getUserByUserName(formUserName);
+        User user = UserUtils.getUserByUserName(formUserName);
         StringBuffer errorInfo = new StringBuffer("");
         if (user != null) {
-            String password = user.getPassword();
-            if(!password.trim().equals(passwordFromURL)) {
+            String realPassword = user.getPassword();
+            if(!realPassword.trim().equals(UserUtils.encodePassword(passwordFromURL.trim()))) {
                 errorInfo.append("用户名与密码不匹配");
             }
         }
         return errorInfo;
     }
 
-    public static StringBuffer validateBalanceByAccountID(HttpServletRequest request, String accountID) {
+    public static StringBuffer validateBalanceByAccountID(HttpServletRequest request, long accountID) {
         StringBuffer errorInfo = new StringBuffer("");
         ShoppingCart shoppingCart = ShoppingCartUtils.getShoppingCart(request);
         float totalMoney = shoppingCart.getTotalMoney();
         AccountService accountService = new AccountService();
-        Account account = accountService.getAccount(Integer.parseInt(accountID));
+        Account account = accountService.getAccount(accountID);
         int balance = account.getBalance();
         if (totalMoney > balance) {
             errorInfo.append("余额不足");
@@ -104,7 +108,7 @@ public class ShoppingCartUtils {
     }
 
     //用户点击支付后要做的事
-    public static void pay(HttpServletRequest request, String userName, String accountID) {
+    public static void pay(HttpServletRequest request, String userName, long accountID) {
         ShoppingCart shoppingCart = ShoppingCartUtils.getShoppingCart(request);
         Collection<ShoppingCartItem> items = shoppingCart.getItems();
 
@@ -114,12 +118,11 @@ public class ShoppingCartUtils {
 
         //2、余额变
         AccountDAOImpl accountDAO = new AccountDAOImpl();
-        accountDAO.updateBalance(Integer.parseInt(accountID), shoppingCart.getTotalMoney());
+        accountDAO.updateBalance(accountID, shoppingCart.getTotalMoney());
 
         //3、交易记录增（交易记录ID、哪个用户、下单时间）
         TradeDAOImpl tradeDAO = new TradeDAOImpl();
-        UserService userService = new UserService();
-        User user = userService.getUserByUserName(userName);
+        User user = UserUtils.getUserByUserName(userName);
         Trade trade = new Trade(user.getUserId(), new Date(System.currentTimeMillis()));
         tradeDAO.insertTradeRecord(trade);
 
