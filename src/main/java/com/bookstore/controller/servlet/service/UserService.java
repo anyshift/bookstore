@@ -1,8 +1,10 @@
 package com.bookstore.controller.servlet.service;
 
 import com.bookstore.controller.dao.Impl.AccountDAOImpl;
+import com.bookstore.controller.utils.OrderUtils;
 import com.bookstore.controller.utils.UserUtils;
 import com.bookstore.model.Account;
+import com.bookstore.model.Order;
 import com.bookstore.model.User;
 
 import javax.servlet.ServletException;
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 
 public class UserService {
 
@@ -98,16 +101,25 @@ public class UserService {
     protected void mySpace(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User userFromSession = (User) request.getSession().getAttribute("user");
         if (userFromSession != null) {
-            String userName = request.getParameter("name");
-            User user = UserUtils.getUserByUserName(userName);
-            if (Integer.parseInt(user.getIsAdmin()) == 1) {
+            if (Integer.parseInt(userFromSession.getIsAdmin()) == 1) {
                 request.getRequestDispatcher("/page/space_admin.jsp").forward(request, response);
             } else {
                 AccountDAOImpl accountDAO = new AccountDAOImpl();
-                Account account = accountDAO.getAccount(user.getUserId());
+                Account account = accountDAO.getAccount(userFromSession.getUserId());
                 request.setAttribute("account", account);
                 request.getRequestDispatcher("/page/space_user.jsp").forward(request, response);
             }
+        } else {
+            response.sendRedirect("index?method=getBooks");
+        }
+    }
+
+    protected void myOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        User userFromSession = (User) request.getSession().getAttribute("user");
+        if (userFromSession != null) {
+            List<Order> orders = OrderUtils.getOrder(userFromSession.getUserId());
+            request.setAttribute("orders", orders);
+            request.getRequestDispatcher("/page/space_order.jsp").forward(request, response);
         } else {
             response.sendRedirect("index?method=getBooks");
         }

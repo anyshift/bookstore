@@ -22,7 +22,7 @@ public class BookDAOTest {
 
     @Test
     public void testGetStoreNumber() {
-        System.out.println(bookDAO.getStoreNumber(1));
+        System.out.println(bookDAO.getStock(1));
     }
 
     @Test

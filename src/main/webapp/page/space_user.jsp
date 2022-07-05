@@ -38,10 +38,10 @@
             <span style="margin: 0 35px"></span>
             <c:choose>
                 <c:when test="${sessionScope.user.isAdmin == 1}">
-                    <a href="user?method=mySpace&name=${sessionScope.user.username}" class="admin_space">管理中心</a>&nbsp;
+                    <a href="user?method=mySpace" class="admin_space">管理中心</a>&nbsp;
                 </c:when>
                 <c:otherwise>
-                    <a href="user?method=mySpace&name=${sessionScope.user.username}" class="user_space">个人中心</a>&nbsp;
+                    <a href="user?method=mySpace" class="user_space">个人中心</a>&nbsp;
                 </c:otherwise>
             </c:choose>
             <a href="user?method=myOrder">我的订单</a>&nbsp;

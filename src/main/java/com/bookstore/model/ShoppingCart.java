@@ -14,10 +14,10 @@ public class ShoppingCart {
 
     //添加书籍到购物车
     public void add(Book book) {
-        ShoppingCartItem sci = books.get(book.getBookId());
+        ShoppingCartItem sci = books.get(book.getId());
         if (sci == null) {
             sci = new ShoppingCartItem(book, 1); //因为sci==null，所以要新建一个购物项(new)，不然put的就是一个null
-            books.put(book.getBookId(), sci);
+            books.put(book.getId(), sci);
         } else sci.increase();
     }
 

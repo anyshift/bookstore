@@ -1,6 +1,7 @@
 package Test;
 
 import com.bookstore.controller.dao.Impl.TradeItemDAOImpl;
+import com.bookstore.controller.utils.OrderUtils;
 import com.bookstore.model.TradeItem;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +16,7 @@ public class TradeItemDAOTest {
     @Test
     public void testBatchSave() {
         List<TradeItem> list = new ArrayList<>();
-        TradeItem tradeItem = new TradeItem(2, 10, 17);
+        TradeItem tradeItem = new TradeItem(2, 10, 17, OrderUtils.getRandomOrderSerialNumber());
         list.add(tradeItem);
         tradeItemDAO.batchSave(list);
     }

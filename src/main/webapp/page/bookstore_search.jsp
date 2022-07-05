@@ -74,10 +74,10 @@
             <span style="margin: 0 21.5px"></span>
             <c:choose>
                 <c:when test="${sessionScope.user.isAdmin == 1}">
-                    <a href="user?method=mySpace&name=${sessionScope.user.username}" class="admin_space">管理中心</a>&nbsp;
+                    <a href="user?method=mySpace" class="admin_space">管理中心</a>&nbsp;
                 </c:when>
                 <c:otherwise>
-                    <a href="user?method=mySpace&name=${sessionScope.user.username}" class="user_space">个人中心</a>&nbsp;
+                    <a href="user?method=mySpace" class="user_space">个人中心</a>&nbsp;
                 </c:otherwise>
             </c:choose>
             <a href="user?method=myOrder" class="order">我的订单</a>&nbsp;
@@ -103,26 +103,26 @@
             <table cellpadding="10" border="1px solid black" cellspacing="0">
                     <%-- books是Page对象， 迭代获取到的book是Book对象。因为Page<Book>。 --%>
                 <tr style="background-color: beige">
-                    <th>书籍</th>
-                    <th>销量</th>
-                    <th>库存</th>
-                    <th>价格</th>
-                    <th>操作</th>
+                    <th style="width: 192px;">书籍</th>
+                    <th style="width: 32px;">销量</th>
+                    <th style="width: 32px;">库存</th>
+                    <th style="width: 32px;">价格</th>
+                    <th style="width: 80px;">操作</th>
                 </tr>
                 <c:forEach items="${requestScope.books.bookList}" var="book">
                     <tr>
-                        <td style="width: 190px;">
-                            <a href="index?method=getBook&bookID=${book.getBookId()}&pageNum=${requestScope.books.currentPageNum}">《${book.title}》</a>
+                        <td>
+                            <a href="index?method=getBook&bookID=${book.id}&pageNum=${requestScope.books.currentPageNum}">《${book.bookName}》</a>
                             <br/> &nbsp; <span style="font-size: 14px">作者: ${book.author}</span>
                         </td>
-                        <td style="text-align: center">${book.salesAmount}</td>
-                        <td style="text-align: center">${book.storeNumber}</td>
-                        <td style="text-align: center">${book.price}</td>
-                        <td style="text-align: center">
+                        <td>${book.salesAmount}</td>
+                        <td>${book.stock}</td>
+                        <td>${book.price}</td>
+                        <td>
                             <c:choose>
-                                <c:when test="${book.storeNumber == 0}">库存不足</c:when>
+                                <c:when test="${book.stock == 0}">库存不足</c:when>
                                 <c:otherwise>
-                                    <a href="index?method=shoppingCart&cartAction=add&pageNum=${requestScope.books.currentPageNum}&bookID=${book.getBookId()}&bookTitle=${book.title}">加入购物车</a>
+                                    <a href="index?method=shoppingCart&cartAction=add&pageNum=${requestScope.books.currentPageNum}&bookID=${book.id}&bookTitle=${book.bookName}">加入购物车</a>
                                 </c:otherwise>
                             </c:choose>
                         </td>

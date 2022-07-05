@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8"  %>
 <html>
 <head>
-    <title>《${requestScope.book.title}》的详细信息</title>
+    <title>《${requestScope.book.bookName}》的详细信息</title>
     <%@ include file="/common/head.jsp"%>
     <%@ include file="/common/common.jsp" %>
     <style>
@@ -46,10 +46,10 @@
                 </c:if>
                 <c:choose>
                     <c:when test="${sessionScope.user.isAdmin == 1}">
-                        <a href="user?method=mySpace&name=${sessionScope.user.username}" class="admin_space">管理中心</a>&nbsp;
+                        <a href="user?method=mySpace" class="admin_space">管理中心</a>&nbsp;
                     </c:when>
                     <c:otherwise>
-                        <a href="user?method=mySpace&name=${sessionScope.user.username}" class="user_space">个人中心</a>&nbsp;
+                        <a href="user?method=mySpace" class="user_space">个人中心</a>&nbsp;
                     </c:otherwise>
                 </c:choose>
                 <a href="user?method=myOrder" class="order">我的订单</a>&nbsp;
@@ -74,12 +74,12 @@
         <table cellpadding="10" border="1px solid black" cellspacing="0"  style="text-align: center">
             <tr style="background-color: beige">
                 <th style="width: 100px;">属性</th>
-                <th style="width: 210px;">详情</th>
+                <th style="width: 212px;">详情</th>
                 <th style="width: 100px;">操作</th>
             </tr>
             <tr>
                 <td style="background-color: beige;">书名</td>
-                <td>《${requestScope.book.title}》</td>
+                <td>《${requestScope.book.bookName}》</td>
                 <td rowspan="7">
                     <c:choose>
                         <c:when test="${param.cartAction == 'bookInfo'}">
@@ -114,9 +114,9 @@
                 <td style="background-color: beige;">库存量</td>
                 <td>
                     <c:choose>
-                        <c:when test="${requestScope.book.storeNumber >= 100}">库存充足</c:when>
-                        <c:when test="${requestScope.book.storeNumber == 0}">库存不足</c:when>
-                        <c:otherwise><font color="red">仅剩${requestScope.book.storeNumber}本</font></c:otherwise>
+                        <c:when test="${requestScope.book.stock >= 100}">库存充足</c:when>
+                        <c:when test="${requestScope.book.stock == 0}">库存不足</c:when>
+                        <c:otherwise><font color="red">仅剩${requestScope.book.stock}本</font></c:otherwise>
                     </c:choose>
                 </td>
             </tr>
@@ -126,7 +126,7 @@
             </tr>
             <tr>
                 <td style="background-color: beige;">备注</td>
-                <td>${requestScope.book.remark}</td>
+                <td>${requestScope.book.info}</td>
             </tr>
         </table>
     </center>

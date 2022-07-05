@@ -18,13 +18,14 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
      */
     @Override
     public Book getBook(int bookID) {
-        String sql = "select id, author, title, price, publishingdate, salesamount, " +
-                "storenumber, remark from mybooks where id = ?";
+        String sql = "select id, author, book_name as bookName, price, publish_date as publishingDate, " +
+                "sales_amount as salesAmount, stock, info from mybooks where id = ?";
         return query(sql, bookID);
     }
 
     public List<Book> searchBookByKeyword(String keyword) {
-        String sql = "SELECT * from mybooks where Title LIKE CONCAT('%', ?, '%')";
+        String sql = "SELECT id, author, book_name as bookName, price, publish_date as publishingDate, " +
+                "sales_amount as salesAmount, stock, info  from mybooks where book_name LIKE CONCAT('%', ?, '%')";
         return queryForList(sql, keyword);
     }
 
@@ -34,8 +35,8 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
      * @return 库存量
      */
     @Override
-    public int getStoreNumber(int bookID) {
-        String sql = "select storenumber from mybooks where id = ?";
+    public int getStock(int bookID) {
+        String sql = "select stock from mybooks where id = ?";
         return getSingleValue(sql, bookID);
     }
 
@@ -51,7 +52,8 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
     }
 
     public long getTotalBooksNumberByKeyword(PriceLimit pl, String keyword) {
-        String sql = "select count(id) from mybooks where price >= ? and price <= ? AND Title LIKE CONCAT('%', ?, '%')";
+        String sql = "select count(id) from mybooks where price >= ? and price <= ? " +
+                "AND book_name LIKE CONCAT('%', ?, '%')";
         return getSingleValue(sql, pl.getMinPrice(), pl.getMaxPrice(), keyword);
     }
 
@@ -95,7 +97,8 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
      */
     @Override
     public List<Book> getBookList(PriceLimit pl, int itemSizePerPage) {
-        String sql = "SELECT * FROM mybooks WHERE Price <= ? AND Price >= ? LIMIT ?, ?";
+        String sql = "SELECT id, author, book_name AS bookName, price, publish_date As publishingDate, " +
+                "sales_amount AS salesAmount, stock, info FROM mybooks WHERE price <= ? AND price >= ? LIMIT ?, ?";
 
         int begin;
         if (pl.getCurrentPageNumber() == 0) {
@@ -107,7 +110,9 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
     }
 
     public List<Book> getBookListByKeyword(PriceLimit pl, int itemSizePerPage, String keyword) {
-        String sql = "SELECT * FROM mybooks WHERE Price <= ? AND Price >= ? AND Title LIKE CONCAT('%', ?, '%') LIMIT ?, ?";
+        String sql = "SELECT id, author, book_name as bookName, price, publish_date as publishingDate, " +
+                "sales_amount as salesAmount, stock, info  FROM mybooks WHERE price <= ? " +
+                "AND price >= ? AND book_name LIKE CONCAT('%', ?, '%') LIMIT ?, ?";
 
         int begin;
         if (pl.getCurrentPageNumber() == 0) {
@@ -119,8 +124,8 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
 
     /*
     public List<Book> getFilterBookList(PriceLimit pl, int itemSizePerPage, String filterType, String filterMode) {
-        String sql = "select id, Author, Title, Price, Publishingdate, Salesamount, " +
-                "Storenumber, Remark from mybooks where price <= ? AND " +
+        String sql = "select id, author, book_name, price, publish_date, sales_amount, " +
+                "stock, info from mybooks where price <= ? AND " +
                 "price >= ? order by ? ? limit ?, ?";
         return queryForList(sql, pl.getMaxPrice(), pl.getMinPrice(), filterType, filterMode,
                         (pl.getCurrentPageNumber() - 1) * itemSizePerPage, itemSizePerPage);
@@ -133,12 +138,12 @@ public class BookDAOImpl extends BaseDAO<Book> implements BookDAO {
      */
     @Override
     public void batchUpdateStockNumberAndSalesAmount(Collection<ShoppingCartItem> items) {
-        String sql = "update mybooks set Salesamount = Salesamount + ?, " +
-                "Storenumber = Storenumber - ? where id = ?";
+        String sql = "update mybooks set sales_amount = sales_amount + ?, " +
+                "stock = stock - ? where id = ?";
 
         //方式一
         for (ShoppingCartItem item : items) {
-            update(sql, item.getQuantity(), item.getQuantity(), item.getBook().getBookId());
+            update(sql, item.getQuantity(), item.getQuantity(), item.getBook().getId());
         }
 
         //方式二

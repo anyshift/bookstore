@@ -6,13 +6,13 @@ import com.bookstore.model.User;
 public class UserDAOImpl extends BaseDAO<User> implements UserDAO {
     @Override
     public User getUserByUserName(String userName) {
-        String sql = "select userid, username, password, accountid, isAdmin from userinfo where username = ?";
+        String sql = "select userid, username, password, accountid, is_admin AS isAdmin from userinfo where username = ?";
         return query(sql, userName);
     }
 
     @Override
     public User getUserByUserId(int userId) {
-        String sql = "select userid, username, password, accountid, isAdmin from userinfo where userid = ?";
+        String sql = "select userid, username, password, accountid, isAdmin AS isAdmin from userinfo where userid = ?";
         return query(sql, userId);
     }
 

@@ -2,9 +2,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>书城网 - 管理中心</title>
-    <%@ include file="/common/head.jsp"%>
+    <title>书城网 - 订单中心</title>
+    <%@ include file="/common/head.jsp" %>
     <%@ include file="/common/common.jsp" %>
+    <style>
+        a { text-decoration: none; }
+        table {
+            text-align: center;
+            table-layout: fixed; /*列宽由表格宽度和列宽度设定*/
+        }
+        td { word-break: break-word; /*允许在单词内换行。*/ }
+    </style>
 </head>
 <body>
 <input type="hidden" name="keyword" value="${param.keyword}"/>
@@ -36,7 +44,14 @@
                     <a href="user?method=mySpace" class="user_space">个人中心</a>&nbsp;
                 </c:otherwise>
             </c:choose>
-            <a href="user?method=myOrder" class="order">我的订单</a>&nbsp;
+            <c:choose>
+                <c:when test="${param.method == 'myOrder'}">
+                    <a href="index?method=getBooks" class="order">返回书城</a>&nbsp;
+                </c:when>
+                <c:otherwise>
+                    <a href="user?method=myOrder" class="order">我的订单</a>&nbsp;
+                </c:otherwise>
+            </c:choose>
             <a href="user?method=logout">退出登陆</a>
         </c:if>
     </form>
@@ -48,9 +63,30 @@
     </c:if>
 
     <br>
-    <table cellpadding="10" border="1px solid black" cellspacing="0">
-
-    </table>
+    <c:choose>
+        <c:when test="${empty requestScope.orders}">无订单记录</c:when>
+        <c:otherwise>
+            <table cellpadding="10" border="1px solid black" cellspacing="0">
+                <tr style="background-color: beige">
+                    <th style="width: 158px;">书籍</th>
+                    <th style="width: 32px;">数量</th>
+                    <th style="width: 136px;">购买时间</th>
+                    <th style="width: 64px;">订单状态</th>
+                </tr>
+                <c:forEach items="${requestScope.orders}" var="order">
+                    <tr>
+                        <td>
+                            ${order.bookName}<br>
+                            <span style="font-size: 12px;color: midnightblue">订单编号: ${order.orderSerialNumber}</span>
+                        </td>
+                        <td>${order.quantity}</td>
+                        <td>${order.tradeTime}</td>
+                        <td>${order.deliveryState}</td>
+                    </tr>
+                </c:forEach>
+            </table>
+        </c:otherwise>
+    </c:choose>
 
 </center>
 </body>

@@ -3,27 +3,27 @@ package com.bookstore.model;
 public class Book {
     private Integer id;
     private String author;
-    private String title;
+    private String bookName;
     private float price;
     private String publishingDate;
     private int salesAmount;
-    private int storeNumber;
-    private String remark;
+    private int stock;
+    private String info;
 
     public Book() {
     }
 
-    public Book(String author, String title, float price, String publishingDate, int salesAmount, int storeNumber, String remark) {
+    public Book(String author, String bookName, float price, String publishingDate, int salesAmount, int stock, String info) {
         this.author = author;
-        this.title = title;
+        this.bookName = bookName;
         this.price = price;
         this.publishingDate = publishingDate;
         this.salesAmount = salesAmount;
-        this.storeNumber = storeNumber;
-        this.remark = remark;
+        this.stock = stock;
+        this.info = info;
     }
 
-    public Integer getBookId() {
+    public Integer getId() {
         return id;
     }
 
@@ -39,12 +39,12 @@ public class Book {
         this.author = author;
     }
 
-    public String getTitle() {
-        return title;
+    public String getBookName() {
+        return bookName;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
     }
 
     public float getPrice() {
@@ -71,20 +71,20 @@ public class Book {
         this.salesAmount = salesAmount;
     }
 
-    public int getStoreNumber() {
-        return storeNumber;
+    public int getStock() {
+        return stock;
     }
 
-    public void setStoreNumber(int storeNumber) {
-        this.storeNumber = storeNumber;
+    public void setStock(int stock) {
+        this.stock = stock;
     }
 
-    public String getRemark() {
-        return remark;
+    public String getInfo() {
+        return info;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setInfo(String info) {
+        this.info = info;
     }
 
     @Override
@@ -92,12 +92,12 @@ public class Book {
         return "Book{" +
                 "id=" + id +
                 ", author='" + author + '\'' +
-                ", title='" + title + '\'' +
+                ", bookName='" + bookName + '\'' +
                 ", price=" + price +
                 ", publishingDate=" + publishingDate +
                 ", salesAmount=" + salesAmount +
-                ", storeNumber=" + storeNumber +
-                ", remark='" + remark + '\'' +
+                ", stock=" + stock +
+                ", info='" + info + '\'' +
                 '}';
     }
 }

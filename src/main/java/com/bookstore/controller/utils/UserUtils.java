@@ -1,7 +1,6 @@
 package com.bookstore.controller.utils;
 
 import com.bookstore.controller.dao.Impl.UserDAOImpl;
-import com.bookstore.controller.servlet.service.UserService;
 import com.bookstore.model.User;
 
 import java.nio.charset.StandardCharsets;
@@ -11,7 +10,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserUtils {
-    private static final UserService userService = new UserService();
     private static final UserDAOImpl userDAO = new UserDAOImpl();
 
     public static User getUserByUserName (String userName) {

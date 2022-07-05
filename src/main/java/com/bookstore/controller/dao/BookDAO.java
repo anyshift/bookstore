@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface BookDAO {
     Book getBook(int bookID); //根据bookID返回Book对象
-    int getStoreNumber(int bookID); //根据bookID返回这本书的库存数量
+    int getStock(int bookID); //根据bookID返回这本书的库存数量
     Page<Book> getPage(PriceLimit pl); //获取在价格区间内的Book页面控制对象
     long getTotalBooksNumber(PriceLimit pl); //获取在价格区间内的总书籍数
     List<Book> getBookList(PriceLimit pl, int itemSizePerPage); //获取在价格区间内的书籍集合，分页展示

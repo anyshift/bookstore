@@ -5,7 +5,7 @@
     <title>购物车</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <%@ include file="/common/head.jsp" %>
-    <script src="/static/js/validate_cart_quantity"></script>
+    <script src="/static/js/validate_cart_quantity.js"></script>
     <%@ include file="/common/common.jsp" %>
     <style>
         a {
@@ -55,10 +55,10 @@
             </c:if>
             <c:choose>
                 <c:when test="${sessionScope.user.isAdmin == 1}">
-                    <a href="user?method=mySpace&name=${sessionScope.user.username}" class="admin_space">管理中心</a>&nbsp;
+                    <a href="user?method=mySpace" class="admin_space">管理中心</a>&nbsp;
                 </c:when>
                 <c:otherwise>
-                    <a href="user?method=mySpace&name=${sessionScope.user.username}" class="user_space">个人中心</a>&nbsp;
+                    <a href="user?method=mySpace" class="user_space">个人中心</a>&nbsp;
                 </c:otherwise>
             </c:choose>
             <a href="user?method=myOrder" class="order">我的订单</a>&nbsp;
@@ -76,7 +76,7 @@
             <br>
             <table cellpadding="10" border="1px solid black" cellspacing="0">
                 <tr style="background-color: beige">
-                    <th style="width: 237px;">书名</th>
+                    <th style="width: 239px;">书名</th>
                     <th style="width: 50px;">数量</th>
                     <th style="width: 50px;">单价</th>
                     <th style="width: 50px;">操作</th>
@@ -86,14 +86,14 @@
                     <c:forEach items="${sessionScope.shoppingCart.items}" var="item">
                         <tr>
                             <td>
-                                <a href="index?method=shoppingCart&cartAction=bookInfo&bookID=${item.book.bookId}&pageNum=${param.pageNum}">${item.book.title}</a>
+                                <a href="index?method=shoppingCart&cartAction=bookInfo&bookID=${item.book.id}&pageNum=${param.pageNum}">${item.book.bookName}</a>
                             </td>
                             <td style="padding: unset">
-                                <input type="text" class="${item.quantity}" size="2" name="${item.book.bookId}"
+                                <input type="text" class="${item.quantity}" size="2" name="${item.book.id}"
                                        value="${item.quantity}" style="text-align: center"/>
                             </td>
                             <td>${item.itemMoney}</td>
-                            <td><a href="index?method=shoppingCart&cartAction=remove&bookID=${item.book.bookId}"
+                            <td><a href="index?method=shoppingCart&cartAction=remove&bookID=${item.book.id}"
                                    class="delete">移除</a></td>
                         </tr>
                     </c:forEach>

@@ -4,7 +4,6 @@ import com.bookstore.controller.dao.Impl.AccountDAOImpl;
 import com.bookstore.controller.dao.Impl.BookDAOImpl;
 import com.bookstore.controller.dao.Impl.TradeDAOImpl;
 import com.bookstore.controller.dao.Impl.TradeItemDAOImpl;
-import com.bookstore.controller.servlet.service.AccountService;
 import com.bookstore.model.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -82,8 +81,7 @@ public class ShoppingCartUtils {
         StringBuffer errorInfo = new StringBuffer("");
         ShoppingCart shoppingCart = ShoppingCartUtils.getShoppingCart(request);
         float totalMoney = shoppingCart.getTotalMoney();
-        AccountService accountService = new AccountService();
-        Account account = accountService.getAccount(accountID);
+        Account account = AccountUtils.getAccount(accountID);
         int balance = account.getBalance();
         if (totalMoney > balance) {
             errorInfo.append("余额不足");
@@ -98,10 +96,10 @@ public class ShoppingCartUtils {
         BookDAOImpl bookDAO = new BookDAOImpl();
         for (ShoppingCartItem item : items) {
             int quantity = item.getQuantity();
-            Integer bookId = item.getBook().getBookId();
-            int storeNumber = bookDAO.getBook(bookId).getStoreNumber();
+            Integer bookId = item.getBook().getId();
+            int storeNumber = bookDAO.getBook(bookId).getStock();
             if (quantity > storeNumber) {
-                errorInfo.append("书籍《" + item.getBook().getTitle() + "》 库存不足");
+                errorInfo.append("书籍《" + item.getBook().getBookName() + "》 库存不足");
             }
         }
         return errorInfo;
@@ -129,11 +127,13 @@ public class ShoppingCartUtils {
         //4、交易项记录增（交易项ID、哪本书、数量、对应交易记录ID）
         TradeItemDAOImpl tradeItemDAOImpl = new TradeItemDAOImpl();
         List<TradeItem> tradeItems = new ArrayList<>();
+        String orderSerialNumber;
         for (ShoppingCartItem item : items) {
-            Integer bookId = item.getBook().getBookId();
+            Integer bookId = item.getBook().getId();
             int quantity = item.getQuantity();
             Integer tradeId = trade.getTradeId();
-            TradeItem tradeItem = new TradeItem(bookId, quantity, tradeId);
+            orderSerialNumber = OrderUtils.getRandomOrderSerialNumber();
+            TradeItem tradeItem = new TradeItem(bookId, quantity, tradeId, orderSerialNumber);
             tradeItems.add(tradeItem);
         }
         tradeItemDAOImpl.batchSave(tradeItems);
