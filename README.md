@@ -19,12 +19,12 @@
 - [x] 支付、支付验证
 - [x] 事务管理
 - [x] 书籍搜索
+- [x] 登陆与注册(密码采用SHA-256加密算法)
 
 ### 😉 待实现
 
 - [ ] 管理员
 - [ ] 书籍的增删改(管理员)
-- [ ] 登陆与注册
 - [ ] 查看购买记录(用户匹配)
 
 ### 🟦 ️阅读建议
@@ -34,81 +34,103 @@
 ### ⌛️ 目录结构
 
 ```
-├── java
-│   └── com
-│       └── bookstore
-│           ├── controller
-│           │   ├── dao
-│           │   │   ├── AccountDAO.java
-│           │   │   ├── BookDAO.java
-│           │   │   ├── DAO.java
-│           │   │   ├── Impl
-│           │   │   │   ├── AccountDAOImpl.java
-│           │   │   │   ├── BaseDAO.java
-│           │   │   │   ├── BookDAOImpl.java
-│           │   │   │   ├── TradeDAOImpl.java
-│           │   │   │   ├── TradeItemDAOImpl.java
-│           │   │   │   └── UserDAOImpl.java
-│           │   │   ├── TradeDAO.java
-│           │   │   ├── TradeItemDAO.java
-│           │   │   └── UserDAO.java
-│           │   ├── filter
-│           │   │   └── TransactionFilter.java
-│           │   ├── servlet
-│           │   │   ├── BookServlet.java
-│           │   │   └── service
-│           │   │       ├── AccountService.java
-│           │   │       ├── BookService.java
-│           │   │       └── UserService.java
-│           │   ├── utils
-│           │   │   ├── JDBCUtils.java
-│           │   │   ├── ReflectionUtils.java
-│           │   │   └── ShoppingCartUtils.java
-│           │   └── webpage
-│           │       ├── Page.java
-│           │       └── PriceLimit.java
-│           └── model
-│               ├── Account.java
-│               ├── Book.java
-│               ├── ShoppingCart.java
-│               ├── ShoppingCartItem.java
-│               ├── Trade.java
-│               ├── TradeItem.java
-│               └── User.java
-├── resources
-│   ├── c3p0-config.xml
-│   └── jdbc.properties
-└── webapp
-    ├── WEB-INF
-    │   ├── jdbc.properties
-    │   ├── lib
-    │   │   ├── c3p0-0.9.1.2.jar
-    │   │   ├── commons-dbutils-1.3.jar
-    │   │   ├── gson-2.2.4.jar
-    │   │   ├── jstl.jar
-    │   │   ├── mysql-connector-java-8.0.28.jar
-    │   │   └── standard.jar
-    │   ├── view
-    │   │   ├── bookInfo.jsp
-    │   │   ├── bookInfoFromCart.jsp
-    │   │   ├── books.jsp
-    │   │   ├── searched.jsp
-    │   │   ├── deal.jsp
-    │   │   ├── dealSuccess.jsp
-    │   │   ├── errors
-    │   │   │   └── errorAddToShoppingCart.jsp
-    │   │   └── shoppingCart.jsp
-    │   └── web.xml
-    ├── common
-    │   └── param.jsp
-    ├── errors
-    │   └── error-pay.jsp
-    ├── index.jsp
-    ├── jquery
-    │   └── jquery-3.6.0.min.js
-    └── js
-        ├── validate-cart-quantity.js
-        └── validate-price.js
+├── main
+│   ├── java
+│   │   └── com
+│   │       └── bookstore
+│   │           ├── controller
+│   │           │   ├── dao
+│   │           │   │   ├── AccountDAO.java
+│   │           │   │   ├── BookDAO.java
+│   │           │   │   ├── DAO.java
+│   │           │   │   ├── Impl
+│   │           │   │   │   ├── AccountDAOImpl.java
+│   │           │   │   │   ├── BaseDAO.java
+│   │           │   │   │   ├── BookDAOImpl.java
+│   │           │   │   │   ├── TradeDAOImpl.java
+│   │           │   │   │   ├── TradeItemDAOImpl.java
+│   │           │   │   │   └── UserDAOImpl.java
+│   │           │   │   ├── TradeDAO.java
+│   │           │   │   ├── TradeItemDAO.java
+│   │           │   │   └── UserDAO.java
+│   │           │   ├── filter
+│   │           │   │   └── TransactionFilter.java
+│   │           │   ├── servlet
+│   │           │   │   ├── BookServlet.java
+│   │           │   │   ├── UserServlet.java
+│   │           │   │   └── service
+│   │           │   │       ├── AccountService.java
+│   │           │   │       ├── BookService.java
+│   │           │   │       └── UserService.java
+│   │           │   ├── utils
+│   │           │   │   ├── JDBCUtils.java
+│   │           │   │   ├── ReflectionUtils.java
+│   │           │   │   ├── ShoppingCartUtils.java
+│   │           │   │   └── UserUtils.java
+│   │           │   └── webpage
+│   │           │       ├── Page.java
+│   │           │       └── PriceLimit.java
+│   │           └── model
+│   │               ├── Account.java
+│   │               ├── Book.java
+│   │               ├── ShoppingCart.java
+│   │               ├── ShoppingCartItem.java
+│   │               ├── Trade.java
+│   │               ├── TradeItem.java
+│   │               └── User.java
+│   ├── resources
+│   │   ├── c3p0-config.xml
+│   │   └── jdbc.properties
+│   └── webapp
+│       ├── WEB-INF
+│       │   ├── jdbc.properties
+│       │   ├── lib
+│       │   │   ├── c3p0-0.9.1.2.jar
+│       │   │   ├── commons-dbutils-1.3.jar
+│       │   │   ├── gson-2.2.4.jar
+│       │   │   ├── jsp-api.jar
+│       │   │   ├── jstl.jar
+│       │   │   ├── mysql-connector-java-8.0.28.jar
+│       │   │   └── standard.jar
+│       │   └── web.xml
+│       ├── common
+│       │   ├── common.jsp
+│       │   └── head.jsp
+│       ├── errors
+│       │   └── error_500.jsp
+│       ├── index.jsp
+│       ├── page
+│       │   ├── book_info.jsp
+│       │   ├── bookstore.jsp
+│       │   ├── bookstore_search.jsp
+│       │   ├── deal.jsp
+│       │   ├── deal_success.jsp
+│       │   ├── errors
+│       │   │   └── error_add_to_cart.jsp
+│       │   ├── login.jsp
+│       │   ├── login_success.jsp
+│       │   ├── logout.jsp
+│       │   ├── register.jsp
+│       │   ├── register_success.jsp
+│       │   ├── shopping_cart.jsp
+│       │   ├── space_admin.jsp
+│       │   └── space_user.jsp
+│       └── static
+│           ├── jquery
+│           │   └── jquery-3.6.0.min.js
+│           └── js
+│               ├── validate_cart_quantity.js
+│               └── validate_price.js
+└── test
+    ├── java
+    │   └── Test
+    │       ├── AccountDAOTest.java
+    │       ├── BaseDAOTest.java
+    │       ├── BookDAOTest.java
+    │       ├── TradeDAOTest.java
+    │       ├── TradeItemDAOTest.java
+    │       └── UserDAOTest.java
+    └── resources
 ```
 
 ### 🔘 部分截图
