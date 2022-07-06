@@ -85,6 +85,7 @@
                     </tr>
                 </c:forEach>
             </table>
+            <p style="font-size: 13px; color: midnightblue; margin-top: 5px;">注：只显示最近十条订单记录</p>
         </c:otherwise>
     </c:choose>
 

@@ -101,7 +101,13 @@
 
                 <tr>
                     <td colspan="4" style="background-color: #e6ecf4" id="totalMoney">
-                        总金额：¥ ${sessionScope.shoppingCart.totalMoney}</td>
+                        当前购物车总价：¥ ${sessionScope.shoppingCart.totalMoney}<br>
+                        <c:if test="${not empty requestScope.account}">
+                            <p style="font-size: 13px; color: midnightblue; margin-top: 5px;">
+                                （账户余额：¥ ${requestScope.account.balance}）
+                            </p>
+                        </c:if>
+                    </td>
                 </tr>
 
             </table>

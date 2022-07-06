@@ -1,14 +1,12 @@
 package com.bookstore.controller.servlet.service;
 
 import com.bookstore.controller.dao.Impl.BookDAOImpl;
+import com.bookstore.controller.utils.AccountUtils;
 import com.bookstore.controller.utils.ShoppingCartUtils;
 import com.bookstore.controller.utils.UserUtils;
 import com.bookstore.controller.webpage.Page;
 import com.bookstore.controller.webpage.PriceLimit;
-import com.bookstore.model.Book;
-import com.bookstore.model.ShoppingCart;
-import com.bookstore.model.ShoppingCartItem;
-import com.bookstore.model.User;
+import com.bookstore.model.*;
 import com.google.gson.Gson;
 
 import javax.servlet.ServletException;
@@ -139,6 +137,11 @@ public class BookService {
                     response.sendRedirect("index?method=searchBooks");
                 }
             } else {
+                User userFromSession = (User) request.getSession().getAttribute("user");
+                if (userFromSession != null) {
+                    Account account = AccountUtils.getAccount(userFromSession.getAccountId());
+                    request.setAttribute("account", account);
+                }
                 request.getRequestDispatcher("/page/shopping_cart.jsp").forward(request, response);
             }
         }

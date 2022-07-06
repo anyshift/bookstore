@@ -11,7 +11,7 @@ public class OrderDAOImpl extends BaseDAO<Order> implements OrderDAO {
                 "quantity, order_serial_number AS orderSerialNumber, delivery_state AS deliveryState FROM trade AS td " +
                 "JOIN tradeitem AS tdi ON td.tradeid = tdi.tradeid AND userid = ? " +
                 "JOIN mybooks ON tdi.bookid = mybooks.id " +
-                "ORDER BY tradetime DESC LIMIT 0, 5";
+                "ORDER BY tradetime DESC LIMIT 0, 10";
         return queryForList(sql, userId);
     }
 }
