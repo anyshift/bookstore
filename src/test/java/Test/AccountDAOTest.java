@@ -15,7 +15,7 @@ public class AccountDAOTest {
 
     @Test void testUpdateBalance() {
         Account account = accountDAO.getAccount(2);
-        accountDAO.updateBalance(2, 1000);
+        accountDAO.setBalance(2, 1000);
         System.out.println("更新之后的余额："+ account.getBalance());
     }
 }

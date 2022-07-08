@@ -41,7 +41,7 @@ $(function () {
             return;
         }
 
-        /* http://localhost:8080/index?method=getBooks */
+        /* http://localhost:8080/index?method=updateQuantityWithAjax */
         let url = "index";
         let bookIdValue = $.trim(this.name); //input中的name值即为bookID
         let args = {"method":"updateQuantityWithAjax", "bookID":bookIdValue, "quantity":quantityValue, "time":new Date()};

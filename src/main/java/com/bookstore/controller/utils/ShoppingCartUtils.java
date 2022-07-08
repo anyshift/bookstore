@@ -116,7 +116,7 @@ public class ShoppingCartUtils {
 
         //2、余额变
         AccountDAOImpl accountDAO = new AccountDAOImpl();
-        accountDAO.updateBalance(accountID, shoppingCart.getTotalMoney());
+        accountDAO.setBalance(accountID, shoppingCart.getTotalMoney());
 
         //3、交易记录增（交易记录ID、哪个用户、下单时间）
         TradeDAOImpl tradeDAO = new TradeDAOImpl();

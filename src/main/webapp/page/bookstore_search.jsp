@@ -10,6 +10,7 @@
     <style>
         a { text-decoration: none; }
         table {
+            text-align: center;
             table-layout: fixed; /*列宽由表格宽度和列宽度设定*/
         }
         td { word-break: break-word; /*允许在单词内换行。*/ }

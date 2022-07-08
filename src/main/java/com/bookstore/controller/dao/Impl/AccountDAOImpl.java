@@ -16,8 +16,8 @@ public class AccountDAOImpl extends BaseDAO<Account> implements AccountDAO {
     }
 
     @Override
-    public void updateBalance(long id, float money) {
-        String sql = "update account set balance=balance-" + money + " where accountid = ?";
-        update(sql, id);
+    public void setBalance(long accountId, double money) {
+        String sql = "update account set balance = " + money + " where accountid = ?";
+        update(sql, accountId);
     }
 }

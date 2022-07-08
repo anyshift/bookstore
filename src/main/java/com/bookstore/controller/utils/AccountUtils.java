@@ -9,4 +9,8 @@ public class AccountUtils {
     public static Account getAccount(long accountID) {
         return accountDAO.getAccount(accountID);
     }
+
+    public static void setBalance(long accountID, double money) {
+        accountDAO.setBalance(accountID, money);
+    }
 }

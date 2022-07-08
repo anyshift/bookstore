@@ -17,6 +17,14 @@ public class OrderUtils {
         return orderDAO.getOrder(userId);
     }
 
+    public static Order getOrderByOrderSerialNumber(String serialNumber) {
+        return orderDAO.getOrderByOrderSerialNumber(serialNumber);
+    }
+
+    public static void setDeliveryState(String deliveryState, String serialNumber) {
+        orderDAO.setDeliveryState(deliveryState, serialNumber);
+    }
+
     /**
      * 生成随机订单编号
      * @return 订单编号

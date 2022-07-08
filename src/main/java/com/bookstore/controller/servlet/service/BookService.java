@@ -324,7 +324,12 @@ public class BookService {
         }
     }
 
-
+    /**
+     * 被validate_cart_quantity.js调用，AJAX修改购物车商品数量
+     * @param request
+     * @param response
+     * @throws IOException
+     */
     protected void updateQuantityWithAjax(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String bookIdFromURL = request.getParameter("bookID");
         String quantityFromURL = request.getParameter("quantity");
