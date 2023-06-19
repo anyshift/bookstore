@@ -4,11 +4,11 @@
 
 ### 🟥 描述
 
-书城项目涉及的内容有 Java、Mysql、JDBC、DBUtils、C3P0、JavaWEB、JQuery、Ajax、JSON等。涉及到的编程思想有：面向接口编程、异步修改、DAO、反射等。采用的设计模式为：MVC。
+书城项目涉及的内容有 Java Web、JDBC、JQuery、Ajax、JSON等。
 
-开发所需环境：JDK、Tomcat、Mysql。
+开发所需环境：JDK、Tomcat、MySQL。
 
-前情提要：测试账号1(`Tom - 123`)、测试账号2(`Jack - 123`)。Tom是管理员，Jack是普通用户。
+测试账号：账号1(`Tom - 123`)、账号2(`Jack - 123`)。Tom是管理员，Jack是普通用户。
 
 ### ✅ 已实现
 
@@ -26,11 +26,7 @@
 - [x] 管理员 (更改用户余额&更新订单状态)
 
 ### 😉 待实现
-- [ ] ~~书籍的增删改~~ (时间有限，该项停止开发)
-
-### 🟦 ️阅读建议
-
-先看model部分，把数据库结构缕清。再看DAO部分，大部分操作都需要通过DAO来完成。其中DAO是接口，由BaseDAO来实现，剩余的DAO实现皆由BaseDAO辅助完成。servlet包中的BookServlet是与书籍有关的入口，UserServlet是与用户有关的入口。BookServlet由包service中的BookService类完成绝大部分页面功能，UserServlet由包UserService类完成绝大部分用户功能。
+- [ ] ~~书籍的增删改~~ (时间有限，停止开发)
 
 ### ⌛️ 目录结构
 
