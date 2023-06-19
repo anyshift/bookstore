@@ -5,7 +5,7 @@
     <title>购书网</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <%@ include file="/common/head.jsp"%>
-    <script src="/static/js/validate_price.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/validate_price.js"></script>
     <%@ include file="/common/common.jsp" %>
     <style>
         a { text-decoration: none; }
